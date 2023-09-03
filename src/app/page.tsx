@@ -1,6 +1,8 @@
+import Login from '@/components/login/login'
+
 const Home = () => (
   <main>
-    <h1 className="text-3xl font-bold">Hello world!</h1>
+    <Login />
   </main>
 )
 

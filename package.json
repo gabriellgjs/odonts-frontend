@@ -4,7 +4,7 @@
   "private": true,
   "scripts": {
     "cz": "cz",
-    "dev": "next dev",
+    "dev": "next dev -p 4000",
     "build": "next build",
     "start": "next start",
     "lint": "next lint",
@@ -14,15 +14,21 @@
     "format": "prettier --write \"src/**/*.ts\""
   },
   "dependencies": {
+    "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "20.5.2",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
+    "axios": "^1.5.0",
     "clsx": "^2.0.0",
     "husky": "^8.0.3",
+    "jsonwebtoken": "^9.0.0",
     "lucide-react": "^0.274.0",
-    "next": "13.4.19",
+    "next": "13.4.9",
+    "next-auth": "^4.22.1",
     "react": "18.2.0",
-    "react-dom": "18.2.0"
+    "react-dom": "18.2.0",
+    "tailwind-merge": "^1.14.0",
+    "tailwindcss-animate": "^1.0.7"
   },
   "devDependencies": {
     "@commitlint/cli": "^17.6.7",

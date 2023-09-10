@@ -2,6 +2,7 @@ import React from 'react'
 
 import './globals.css'
 import { Roboto } from 'next/font/google'
+import NextAuthProviderSession from '@/providers/sessionProviders'
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -16,8 +17,11 @@ export const metadata = {
 
 const RootLayout = ({ children }: { children: React.ReactNode }) => (
   <html lang="pt-BR">
-    <body className={`${roboto.variable} bg-neutral-50 font-sans`}>
-      {children}
+    <body
+      className={`${roboto.variable} bg-neutral-50 font-sans`}
+      suppressHydrationWarning={true}
+    >
+      <NextAuthProviderSession>{children}</NextAuthProviderSession>
     </body>
   </html>
 )

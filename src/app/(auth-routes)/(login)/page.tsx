@@ -3,10 +3,11 @@
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useState } from 'react'
-import Logo from '../logo/logo'
-import Button from '../shared/button/button'
-import Input from '../shared/input/input'
-import InputPassword from '../shared/input/inputPassword'
+
+import Logo from '@/components/logo/logo'
+import Button from '@/components/shared/button/button'
+import Input from '@/components/shared/input/input'
+import InputPassword from '@/components/shared/input/inputPassword'
 
 export default function Login() {
   const [email, setEmail] = useState('')
@@ -24,10 +25,11 @@ export default function Login() {
     })
 
     if (result?.error) {
+      console.log(result)
       return
     }
 
-    router.replace('/admin')
+    router.replace('/dashboard')
   }
 
   return (

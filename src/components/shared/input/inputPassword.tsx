@@ -2,10 +2,9 @@
 
 import { useState } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
-import clsx from 'clsx'
 import * as colors from 'tailwindcss/colors'
 
-const InputPassword = () => {
+const InputPassword = ({ setState }: InputPasswordProps) => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
 
   const togglePasswordVisibility = () =>
@@ -18,7 +17,7 @@ const InputPassword = () => {
           className="w-full rounded-lg border-2 border-solid border-gray-100 p-4 text-base text-gray-900 focus:border-orange-500 focus:outline-none focus:placeholder:text-gray-800"
           type={isPasswordVisible ? 'text' : 'password'}
           placeholder="Senha"
-          autoFocus
+          onChange={(e) => setState(e.target.value)}
         />
 
         <button

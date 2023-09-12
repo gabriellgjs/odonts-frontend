@@ -3,13 +3,14 @@
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useState } from 'react'
+import Image from 'next/image'
 
-import Logo from '@/components/logo/logo'
+import LogoOdontsSvg from '../../assets/logoOdonts.svg'
 import Button from '@/components/shared/button/button'
 import Input from '@/components/shared/input/input'
-import InputPassword from '@/components/shared/input/inputPassword'
+import InputPassword from './inputPassword'
 
-export default function Login() {
+const SignIn = () => {
   const [email, setEmail] = useState('')
   const [password, setPassword] = useState('')
 
@@ -29,13 +30,17 @@ export default function Login() {
       return
     }
 
-    router.replace('/dashboard')
+    router.replace('/')
   }
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
       <div className="w-96">
-        <Logo />
+        <div className="flex flex-col items-center justify-center">
+          <Image src={LogoOdontsSvg} alt="Logo" />
+
+          <p className="mt-8 text-5xl font-bold text-orange-500">ODONTS</p>
+        </div>
 
         <form className="mt-8 flex flex-col gap-8 " onSubmit={handleSubmit}>
           <Input placeholder="E-mail" type="email" setState={setEmail} />
@@ -46,3 +51,5 @@ export default function Login() {
     </div>
   )
 }
+
+export default SignIn

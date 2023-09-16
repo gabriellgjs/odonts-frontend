@@ -45,3 +45,5 @@ const nextAuthOptions: NextAuthOptions = {
 const handler = NextAuth(nextAuthOptions)
 
 export { handler as GET, handler as POST, nextAuthOptions }
+
+// TODO estudar sobre route-handlers do next 13

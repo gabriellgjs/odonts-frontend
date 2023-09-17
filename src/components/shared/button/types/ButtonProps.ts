@@ -1,6 +1,12 @@
-import { ButtonHTMLAttributes } from 'react'
+import { ButtonHTMLAttributes, ReactNode } from 'react'
 
-export interface ButtonProps extends ButtonHTMLAttributes<HTMLButtonElement> {
-  title: string
-  className?: string
+interface VariantsButton {
+  variant?: 'default' | 'outline'
+}
+
+export interface ButtonProps
+  extends ButtonHTMLAttributes<HTMLButtonElement>,
+    VariantsButton {
+  children: ReactNode
+  baseStyle?: string
 }

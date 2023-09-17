@@ -5,9 +5,9 @@ import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useRef, useState } from 'react'
 
 import Input from '@components/shared/input/input'
-import InputPassword from './inputPassword'
 import Logo from '@components/shared/logo/logo'
-import { Button } from '../ui/button'
+import { Button } from '@components/ui/button'
+import InputPassword from './inputPassword'
 
 const SignIn = () => {
   const emailInputRef = useRef<HTMLInputElement>(null)

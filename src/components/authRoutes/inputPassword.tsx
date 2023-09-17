@@ -32,13 +32,10 @@ const InputPassword = ({ setState }: InputPasswordProps) => {
           )}
         </button>
       </div>
-      <div className="flex justify-end">
-        <p className="mt-4 cursor-pointer font-medium text-orange-500 hover:text-orange-600">
-          Esqueceu a senha?
-        </p>
-      </div>
     </div>
   )
 }
 
 export default InputPassword
+
+// TODO recriar esse componente

@@ -1,6 +1,11 @@
-export type InputProps = {
-  placeholder: string
-  type: string
+import { VariantProps } from 'class-variance-authority'
+import { InputHTMLAttributes } from 'react'
+import { variantsInput } from '../input'
+
+export interface InputProps
+  extends InputHTMLAttributes<HTMLInputElement>,
+    VariantProps<typeof variantsInput> {
   className?: string
-  setState: (value: string) => void
 }
+
+// TODO remover a apos recriar o componente

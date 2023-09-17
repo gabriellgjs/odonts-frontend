@@ -14,11 +14,16 @@
     "format": "prettier --write \"src/**/*.ts\""
   },
   "dependencies": {
+    "@radix-ui/react-dialog": "^1.0.4",
+    "@radix-ui/react-label": "^2.0.2",
+    "@radix-ui/react-separator": "^1.0.3",
+    "@radix-ui/react-slot": "^1.0.2",
     "@types/jsonwebtoken": "^9.0.2",
     "@types/node": "20.5.2",
     "@types/react": "18.2.20",
     "@types/react-dom": "18.2.7",
     "axios": "^1.5.0",
+    "class-variance-authority": "^0.7.0",
     "clsx": "^2.0.0",
     "husky": "^8.0.3",
     "jsonwebtoken": "^9.0.0",

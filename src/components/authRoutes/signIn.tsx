@@ -2,16 +2,15 @@
 
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { SyntheticEvent, useState } from 'react'
-import Image from 'next/image'
+import { SyntheticEvent, useRef, useState } from 'react'
 
-import LogoOdontsSvg from '../../assets/logoOdonts.svg'
-import Button from '@/components/shared/button/button'
-import Input from '@/components/shared/input/input'
+import Input from '@components/shared/input/input'
 import InputPassword from './inputPassword'
+import Logo from '@components/shared/logo/logo'
+import { Button } from '../ui/button'
 
 const SignIn = () => {
-  const [email, setEmail] = useState('')
+  const emailInputRef = useRef<HTMLInputElement>(null)
   const [password, setPassword] = useState('')
 
   const router = useRouter()
@@ -20,32 +19,43 @@ const SignIn = () => {
     event.preventDefault()
 
     const result = await signIn('credentials', {
-      email,
+      email: emailInputRef.current?.value,
       password,
       redirect: false,
     })
 
     if (result?.error) {
-      console.log(result)
       return
     }
 
-    router.replace('/')
+    router.push('/')
   }
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
       <div className="w-96">
         <div className="flex flex-col items-center justify-center">
-          <Image src={LogoOdontsSvg} alt="Logo" />
+          <Logo />
 
-          <p className="mt-8 text-5xl font-bold text-orange-500">ODONTS</p>
+          <p className="mt-8 text-5xl font-bold uppercase text-orange-500">
+            odonts
+          </p>
         </div>
 
-        <form className="mt-8 flex flex-col gap-8 " onSubmit={handleSubmit}>
-          <Input placeholder="E-mail" type="email" setState={setEmail} />
+        <form
+          className="mx-8 mt-8 flex flex-col gap-8 sm:mx-0"
+          onSubmit={handleSubmit}
+        >
+          <Input ref={emailInputRef} placeholder="E-mail" type="email" />
           <InputPassword setState={setPassword} />
-          <Button type="submit" title="Acessar" />
+
+          <div className="flex justify-end">
+            <p className="mt-4 cursor-pointer font-medium text-orange-500 hover:text-orange-600">
+              Esqueceu a senha?
+            </p>
+          </div>
+
+          <Button variant={'outline'} type="submit">entrar</Button>
         </form>
       </div>
     </div>

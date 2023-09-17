@@ -4,5 +4,4 @@
     "@rocketseat/eslint-config/next"
   ],
   "ignorePatterns": ["*.d.ts"],
-  "rules": {"react/display-name": "off"}
 }

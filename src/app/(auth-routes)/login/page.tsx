@@ -1,4 +1,4 @@
-import SignIn from '@/components/authRoutes/signIn'
+import SignIn from '@components/authRoutes/signIn'
 
 const SigInLogin = () => <SignIn />
 

@@ -4,23 +4,23 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useRef, useState } from 'react'
 
-import Input from '@components/shared/input/input'
+import Input from '@components/ui/input'
 import Logo from '@components/shared/logo/logo'
 import { Button } from '@components/ui/button'
-import InputPassword from './inputPassword'
 
 const SignIn = () => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const emailInputRef = useRef<HTMLInputElement>(null)
-  const [password, setPassword] = useState('')
+  const passwordInputRef = useRef<HTMLInputElement>(null)
 
   const router = useRouter()
 
-  async function handleSubmit(event: SyntheticEvent) {
+  const handleSubmit = async (event: SyntheticEvent) => {
     event.preventDefault()
 
     const result = await signIn('credentials', {
       email: emailInputRef.current?.value,
-      password,
+      password: passwordInputRef.current?.value,
       redirect: false,
     })
 
@@ -30,6 +30,9 @@ const SignIn = () => {
 
     router.push('/')
   }
+  
+  const togglePasswordVisibility = () =>
+    setIsPasswordVisible((prevState) => !prevState)
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
@@ -46,8 +49,21 @@ const SignIn = () => {
           className="mx-8 mt-8 flex flex-col gap-8 sm:mx-0"
           onSubmit={handleSubmit}
         >
-          <Input ref={emailInputRef} placeholder="E-mail" type="email" />
-          <InputPassword setState={setPassword} />
+          <Input 
+            variant='email' 
+            ref={emailInputRef} 
+            placeholder="E-mail" 
+            type="email" 
+          />
+
+          <Input 
+            variant='password' 
+            ref={passwordInputRef} 
+            placeholder="Senha" 
+            type="password" 
+            togglePasswordVisibility={togglePasswordVisibility} 
+            isPasswordVisible={isPasswordVisible}
+          />
 
           <div className="flex justify-end">
             <p className="mt-4 cursor-pointer font-medium text-orange-500 hover:text-orange-600">
@@ -55,7 +71,7 @@ const SignIn = () => {
             </p>
           </div>
 
-          <Button variant={'outline'} type="submit">entrar</Button>
+          <Button type="submit">entrar</Button>
         </form>
       </div>
     </div>

@@ -11,7 +11,7 @@ import {
 import { CalendarHeart, Home, PersonStanding, Users } from 'lucide-react'
 
 import SideBarLink from '../../shared/sideBarLink/sideBarLink'
-import Logo from '../logo/logo'
+import { Logo } from '../logo/logo'
 
 const SideBar = () => {
   return (

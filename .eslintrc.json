@@ -3,5 +3,5 @@
     "next/core-web-vitals",
     "@rocketseat/eslint-config/next"
   ],
-  "ignorePatterns": ["*.d.ts"],
+  "ignorePatterns": ["*.d.ts"]
 }

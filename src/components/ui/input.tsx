@@ -6,21 +6,21 @@ import colors from 'tailwindcss/colors'
 
 const inputVariants = cva(
   [
-    'flex-1', 
-    'rounded-lg', 
-    'border-2', 
-    'border-gray-100', 
-    'text-base', 
-    'text-gray-900', 
+    'flex-1',
+    'rounded-lg',
+    'border-2',
+    'border-gray-100',
+    'text-base',
+    'text-gray-900',
     'focus:border-orange-500',
-    'focus:outline-none', 
-    'focus:placeholder:text-gray-800'
+    'focus:outline-none',
+    'focus:placeholder:text-gray-800',
   ],
   {
     variants: {
       variant: {
         email: [''],
-        password: ['w-full']
+        password: ['w-full'],
       },
       inputSize: {
         default: 'p-4',
@@ -33,30 +33,44 @@ const inputVariants = cva(
   },
 )
 
-export interface InputProps
+interface InputProps
   extends DetailedHTMLProps<
       InputHTMLAttributes<HTMLInputElement>,
       HTMLInputElement
     >,
     VariantProps<typeof inputVariants> {
-      isPasswordVisible?: boolean
-      togglePasswordVisibility?: () => void
-    }
-      
+  isPasswordVisible?: boolean
+  togglePasswordVisibility?: () => void
+}
 
-const Input = forwardRef<HTMLInputElement, InputProps>(
-  ({ className, type, variant,isPasswordVisible, togglePasswordVisibility, ...rest }, ref) => {
+export const Input = forwardRef<HTMLInputElement, InputProps>(
+  (
+    {
+      className,
+      type,
+      variant,
+      isPasswordVisible,
+      togglePasswordVisibility,
+      ...rest
+    },
+    ref,
+  ) => {
     return (
-      <div className={cn('flex', variant === 'password'? 'relative' : '')}>
+      <div className={cn('flex', variant === 'password' ? 'relative' : '')}>
         <input
-          type={variant === 'password' ? isPasswordVisible ? 'text' : 'password' : 'text'}
+          type={
+            variant === 'password'
+              ? isPasswordVisible
+                ? 'text'
+                : 'password'
+              : 'text'
+          }
           className={cn(inputVariants({ variant, className }))}
           ref={ref}
           {...rest}
         />
-        {
-          variant === 'password' && (
-            <button
+        {variant === 'password' && (
+          <button
             onClick={togglePasswordVisibility}
             className="absolute inset-y-0 right-0 flex items-center px-4 "
             type="button"
@@ -67,13 +81,9 @@ const Input = forwardRef<HTMLInputElement, InputProps>(
               <EyeOff className="h-5 w-5" color={colors.gray[500]} />
             )}
           </button>
-          )
-        }      
+        )}
       </div>
-
     )
   },
 )
 Input.displayName = 'Input'
-
-export default Input 

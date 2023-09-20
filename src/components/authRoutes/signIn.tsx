@@ -4,11 +4,11 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useRef, useState } from 'react'
 
-import Input from '@components/ui/input'
-import Logo from '@components/shared/logo/logo'
+import { Input } from '@components/ui/input'
+import { Logo } from '@components/shared/logo/logo'
 import { Button } from '@components/ui/button'
 
-const SignIn = () => {
+export const SignIn = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
   const emailInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
@@ -30,7 +30,7 @@ const SignIn = () => {
 
     router.push('/')
   }
-  
+
   const togglePasswordVisibility = () =>
     setIsPasswordVisible((prevState) => !prevState)
 
@@ -49,19 +49,19 @@ const SignIn = () => {
           className="mx-8 mt-8 flex flex-col gap-8 sm:mx-0"
           onSubmit={handleSubmit}
         >
-          <Input 
-            variant='email' 
-            ref={emailInputRef} 
-            placeholder="E-mail" 
-            type="email" 
+          <Input
+            variant="email"
+            ref={emailInputRef}
+            placeholder="E-mail"
+            type="email"
           />
 
-          <Input 
-            variant='password' 
-            ref={passwordInputRef} 
-            placeholder="Senha" 
-            type="password" 
-            togglePasswordVisibility={togglePasswordVisibility} 
+          <Input
+            variant="password"
+            ref={passwordInputRef}
+            placeholder="Senha"
+            type="password"
+            togglePasswordVisibility={togglePasswordVisibility}
             isPasswordVisible={isPasswordVisible}
           />
 
@@ -77,5 +77,3 @@ const SignIn = () => {
     </div>
   )
 }
-
-export default SignIn

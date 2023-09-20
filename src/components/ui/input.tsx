@@ -47,7 +47,6 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
   (
     {
       className,
-      type,
       variant,
       isPasswordVisible,
       togglePasswordVisibility,

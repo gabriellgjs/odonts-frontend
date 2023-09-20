@@ -1,6 +1,6 @@
 import { SideBarLinkProps } from './types/sideBarLink'
 
-const SideBarLink = ({ title, icon, isSelect = false }: SideBarLinkProps) => {
+const SideBarLink = ({ title, icon = false }: SideBarLinkProps) => {
   return (
     <div className="flex cursor-pointer items-center">
       <div className="rounded-2xl p-2 ">{icon}</div>

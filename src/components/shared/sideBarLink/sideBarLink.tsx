@@ -1,10 +1,38 @@
+import { cn } from '@/lib/utils'
+import { useRouter } from 'next/navigation'
 import { SideBarLinkProps } from './types/sideBarLink'
 
-const SideBarLink = ({ title, icon = false }: SideBarLinkProps) => {
+const SideBarLink = ({
+  title,
+  icon,
+  isActive,
+  href,
+  onClick,
+}: SideBarLinkProps) => {
+  const router = useRouter()
+
+  const toggleRedirectPage = (href: string) => {
+    router.push(href)
+    onClick()
+  }
+
   return (
-    <div className="flex cursor-pointer items-center">
+    <div
+      onClick={() => toggleRedirectPage(href)}
+      className={cn(
+        'my-3 flex  cursor-pointer items-center rounded-lg py-2',
+        `${!isActive ? 'hover:bg-gray-200' : 'bg-gray-700 hover:bg-gray-600'}`,
+      )}
+    >
       <div className="rounded-2xl p-2 ">{icon}</div>
-      <span className="ml-4 text-sm font-bold">{title}</span>
+      <span
+        className={cn(
+          'ml-4 text-sm ',
+          `${isActive ? 'font-bold text-white' : 'font-medium'}`,
+        )}
+      >
+        {title}
+      </span>
     </div>
   )
 }

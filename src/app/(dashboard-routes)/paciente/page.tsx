@@ -1,5 +1,9 @@
 const Patients = () => {
-  return <div></div>
+  return (
+    <div>
+      <h1>Paciente</h1>
+    </div>
+  )
 }
 
 export default Patients

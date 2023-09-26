@@ -9,6 +9,7 @@ export const Logo = ({ height, width }: LogoProps) => {
       alt="Logo do aplicativo ODONTS"
       width={width}
       height={height}
+      priority={true}
     />
   )
 }

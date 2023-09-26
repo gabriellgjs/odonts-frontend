@@ -1,9 +1,5 @@
 const Appointments = () => {
-  return (
-    <div>
-      <h1>Agendamentos</h1>
-    </div>
-  )
+  return <div></div>
 }
 
 export default Appointments

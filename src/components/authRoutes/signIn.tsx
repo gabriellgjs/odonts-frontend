@@ -65,12 +65,6 @@ export const SignIn = () => {
             isPasswordVisible={isPasswordVisible}
           />
 
-          <div className="flex justify-end">
-            <p className="mt-4 cursor-pointer font-medium text-orange-500 hover:text-orange-600">
-              Esqueceu a senha?
-            </p>
-          </div>
-
           <Button type="submit">entrar</Button>
         </form>
       </div>

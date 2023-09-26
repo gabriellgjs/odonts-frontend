@@ -4,6 +4,7 @@ import { useRouter } from 'next/navigation'
 import { cloneElement, forwardRef } from 'react'
 import colors from 'tailwindcss/colors'
 import { SideBarLinkProps } from './types/sideBarLink'
+import { Logout } from '@/app/api/logout/logout'
 
 export const sideBarLinkVariants = cva('my-3 flex  cursor-pointer', {
   variants: {
@@ -26,9 +27,15 @@ export const SideBarLink = forwardRef<HTMLLIElement, SideBarLinkProps>(
   ({ href, icon, onClick, title, isActive, variant, size, className }, ref) => {
     const router = useRouter()
 
-    const toggleRedirectPage = (href: string) => {
-      router.push(href)
-      onClick()
+    const toggleRedirectPage = async (href: string) => {
+      if (variant === 'default') {
+        router.push(href)
+        onClick()
+        return
+      }
+
+      await Logout()
+      router.replace('/login')
     }
 
     return (

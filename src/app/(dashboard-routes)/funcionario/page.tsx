@@ -1,5 +1,7 @@
+import { EmployeesList } from '@components/employee/employeeList'
+
 const Employees = () => {
-  return <div></div>
+  return <EmployeesList />
 }
 
 export default Employees

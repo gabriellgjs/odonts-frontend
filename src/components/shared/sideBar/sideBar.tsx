@@ -10,7 +10,7 @@ import {
 } from 'lucide-react'
 import { useSelectedLayoutSegment } from 'next/navigation'
 
-import { SideBarContext } from '@/providers/sideBarProvider'
+import { SideBarContext } from '@providers/sideBarProvider'
 import { SideBarLink } from '@components/shared/sideBarLink/sideBarLink'
 import { Separator } from '@components/ui/separator'
 import { Sheet, SheetContent, SheetTitle } from '@components/ui/sheet'
@@ -22,6 +22,7 @@ import { SideBarProps } from './types/sideBarProps'
 const SideBar = ({ children }: SideBarProps) => {
   const { sideBarActivated, toggleOpenSideBar } = useContext(SideBarContext)
   const segment = useSelectedLayoutSegment()
+
   const sideBarOptions: SideBarLinkProps[] = [
     {
       title: 'Dashboard',

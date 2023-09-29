@@ -1,4 +1,4 @@
-import { cn } from '@/lib/utils'
+import { cn } from '@lib/utils'
 import { cva } from 'class-variance-authority'
 import { useRouter } from 'next/navigation'
 import { cloneElement, forwardRef, memo, useCallback } from 'react'

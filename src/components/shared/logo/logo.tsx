@@ -2,7 +2,7 @@ import Image from 'next/image'
 import Logosvg from '@/assets/logo.svg'
 import { LogoProps } from './types/logoProps'
 
-const Logo = ({ height, width }: LogoProps) => {
+export const Logo = ({ height, width }: LogoProps) => {
   return (
     <Image
       src={Logosvg}
@@ -12,5 +12,3 @@ const Logo = ({ height, width }: LogoProps) => {
     />
   )
 }
-
-export default Logo

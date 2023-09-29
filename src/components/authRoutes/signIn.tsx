@@ -2,34 +2,49 @@
 
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { SyntheticEvent, useRef, useState } from 'react'
+import { SyntheticEvent, useCallback, useRef, useState } from 'react'
 
-import Input from '@components/shared/input/input'
-import Logo from '@components/shared/logo/logo'
+import { Logo } from '@components/shared/logo/logo'
 import { Button } from '@components/ui/button'
-import InputPassword from './inputPassword'
+import { Input } from '@components/ui/input'
 
-const SignIn = () => {
+export const SignIn = () => {
+  const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const emailInputRef = useRef<HTMLInputElement>(null)
-  const [password, setPassword] = useState('')
-
+  const passwordInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
-  async function handleSubmit(event: SyntheticEvent) {
-    event.preventDefault()
+  const handleSubmit = useCallback(
+    async (event: SyntheticEvent) => {
+      event.preventDefault()
 
-    const result = await signIn('credentials', {
-      email: emailInputRef.current?.value,
-      password,
-      redirect: false,
-    })
+      try {
+        setIsLoading(true)
+        const result = await signIn('credentials', {
+          email: emailInputRef.current?.value,
+          password: passwordInputRef.current?.value,
+          redirect: false,
+        })
 
-    if (result?.error) {
-      return
-    }
+        if (result?.error) {
+          return
+        }
 
-    router.push('/')
-  }
+        router.push('/')
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setIsLoading(false)
+      }
+    },
+    [router],
+  )
+
+  const handleTogglePasswordVisibility = useCallback(
+    () => setIsPasswordVisible((prevState) => !prevState),
+    [],
+  )
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
@@ -46,20 +61,27 @@ const SignIn = () => {
           className="mx-8 mt-8 flex flex-col gap-8 sm:mx-0"
           onSubmit={handleSubmit}
         >
-          <Input ref={emailInputRef} placeholder="E-mail" type="email" />
-          <InputPassword setState={setPassword} />
+          <Input
+            variant="email"
+            ref={emailInputRef}
+            placeholder="E-mail"
+            type="email"
+          />
 
-          <div className="flex justify-end">
-            <p className="mt-4 cursor-pointer font-medium text-orange-500 hover:text-orange-600">
-              Esqueceu a senha?
-            </p>
-          </div>
+          <Input
+            variant="password"
+            ref={passwordInputRef}
+            placeholder="Senha"
+            type="password"
+            togglePasswordVisibility={handleTogglePasswordVisibility}
+            isPasswordVisible={isPasswordVisible}
+          />
 
-          <Button variant={'outline'} type="submit">entrar</Button>
+          <Button disabled={isLoading} type="submit">
+            entrar
+          </Button>
         </form>
       </div>
     </div>
   )
 }
-
-export default SignIn

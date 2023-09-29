@@ -1,24 +1,24 @@
 'use client'
 
-import { Button } from '@/components/ui/button'
-import { Separator } from '@/components/ui/separator'
+import { Button } from '@components/ui/button'
+import { Separator } from '@components/ui/separator'
 import {
   Sheet,
   SheetContent,
   SheetTitle,
   SheetTrigger,
-} from '@/components/ui/sheet'
+} from '@components/ui/sheet'
 import { CalendarHeart, Home, PersonStanding, Users } from 'lucide-react'
 
 import SideBarLink from '../../shared/sideBarLink/sideBarLink'
-import Logo from '../logo/logo'
+import { Logo } from '../logo/logo'
 
 const SideBar = () => {
   return (
     <div className="grid grid-cols-2 gap-2">
       <Sheet>
         <SheetTrigger asChild data-state="open">
-          <Button variant="outline">123</Button>
+          <Button>123</Button>
         </SheetTrigger>
 
         <SheetContent side={'left'}>
@@ -55,5 +55,3 @@ const SideBar = () => {
 }
 
 export default SideBar
-
-// TODO ainda em construção

@@ -70,7 +70,7 @@ const SideBar = ({ children }: SideBarProps) => {
     <>
       <div className="grid grid-cols-2 gap-2 ">
         <Sheet open={sideBarActivated}>
-          <SheetContent side={'left'} closeSheet={toggleOpenSideBar}>
+          <SheetContent side="left" closeSheet={toggleOpenSideBar}>
             <div className="flex h-screen flex-col">
               <SheetTitle className="flex flex-row items-center justify-between">
                 <Logo width={40} height={40} />

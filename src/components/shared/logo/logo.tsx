@@ -1,5 +1,5 @@
 import Image from 'next/image'
-import LogoSVG from '@/assets/logo.svg'
+import LogoSVG from '@assets/logo.svg'
 import { LogoProps } from './types/logoProps'
 
 export const Logo = ({ height, width }: LogoProps) => {

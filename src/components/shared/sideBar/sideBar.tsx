@@ -14,7 +14,7 @@ import { SideBarContext } from '@/providers/sideBarProvider'
 import { SideBarLink } from '@components/shared/sideBarLink/sideBarLink'
 import { Separator } from '@components/ui/separator'
 import { Sheet, SheetContent, SheetTitle } from '@components/ui/sheet'
-import { useContext } from 'react'
+import { memo, useContext } from 'react'
 import { Logo } from '../logo/logo'
 import { SideBarLinkProps } from '../sideBarLink/types/sideBarLink'
 import { SideBarProps } from './types/sideBarProps'
@@ -101,6 +101,6 @@ const SideBar = ({ children }: SideBarProps) => {
   )
 }
 
-export default SideBar
+export default memo(SideBar)
 
 // TODO ainda em construção

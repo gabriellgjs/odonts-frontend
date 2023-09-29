@@ -4,34 +4,41 @@ import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { SyntheticEvent, useRef, useState } from 'react'
 
-import { Input } from '@components/ui/input'
 import { Logo } from '@components/shared/logo/logo'
 import { Button } from '@components/ui/button'
+import { Input } from '@components/ui/input'
 
 export const SignIn = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
+  const [isLoading, setIsLoading] = useState(false)
   const emailInputRef = useRef<HTMLInputElement>(null)
   const passwordInputRef = useRef<HTMLInputElement>(null)
-
   const router = useRouter()
 
-  const handleSubmit = async (event: SyntheticEvent) => {
+  const handlerSubmit = async (event: SyntheticEvent) => {
     event.preventDefault()
 
-    const result = await signIn('credentials', {
-      email: emailInputRef.current?.value,
-      password: passwordInputRef.current?.value,
-      redirect: false,
-    })
+    try {
+      setIsLoading(true)
+      const result = await signIn('credentials', {
+        email: emailInputRef.current?.value,
+        password: passwordInputRef.current?.value,
+        redirect: false,
+      })
 
-    if (result?.error) {
-      return
+      if (result?.error) {
+        return
+      }
+
+      router.push('/')
+    } catch (error) {
+      console.log(error)
+    } finally {
+      setIsLoading(false)
     }
-
-    router.push('/')
   }
 
-  const togglePasswordVisibility = () =>
+  const handleTogglePasswordVisibility = () =>
     setIsPasswordVisible((prevState) => !prevState)
 
   return (
@@ -47,7 +54,7 @@ export const SignIn = () => {
 
         <form
           className="mx-8 mt-8 flex flex-col gap-8 sm:mx-0"
-          onSubmit={handleSubmit}
+          onSubmit={handlerSubmit}
         >
           <Input
             variant="email"
@@ -61,11 +68,13 @@ export const SignIn = () => {
             ref={passwordInputRef}
             placeholder="Senha"
             type="password"
-            togglePasswordVisibility={togglePasswordVisibility}
+            togglePasswordVisibility={handleTogglePasswordVisibility}
             isPasswordVisible={isPasswordVisible}
           />
 
-          <Button type="submit">entrar</Button>
+          <Button disabled={isLoading} type="submit">
+            entrar
+          </Button>
         </form>
       </div>
     </div>

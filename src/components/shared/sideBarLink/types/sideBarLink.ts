@@ -13,4 +13,3 @@ export interface SideBarLinkProps
   current?: boolean
   onClick: () => void
 }
-// TODO ainda em construção

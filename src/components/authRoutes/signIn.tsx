@@ -2,7 +2,7 @@
 
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { SyntheticEvent, useRef, useState } from 'react'
+import { SyntheticEvent, useCallback, useRef, useState } from 'react'
 
 import { Logo } from '@components/shared/logo/logo'
 import { Button } from '@components/ui/button'
@@ -15,31 +15,36 @@ export const SignIn = () => {
   const passwordInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
 
-  const handlerSubmit = async (event: SyntheticEvent) => {
-    event.preventDefault()
+  const handleSubmit = useCallback(
+    async (event: SyntheticEvent) => {
+      event.preventDefault()
 
-    try {
-      setIsLoading(true)
-      const result = await signIn('credentials', {
-        email: emailInputRef.current?.value,
-        password: passwordInputRef.current?.value,
-        redirect: false,
-      })
+      try {
+        setIsLoading(true)
+        const result = await signIn('credentials', {
+          email: emailInputRef.current?.value,
+          password: passwordInputRef.current?.value,
+          redirect: false,
+        })
 
-      if (result?.error) {
-        return
+        if (result?.error) {
+          return
+        }
+
+        router.push('/')
+      } catch (error) {
+        console.log(error)
+      } finally {
+        setIsLoading(false)
       }
+    },
+    [router],
+  )
 
-      router.push('/')
-    } catch (error) {
-      console.log(error)
-    } finally {
-      setIsLoading(false)
-    }
-  }
-
-  const handleTogglePasswordVisibility = () =>
-    setIsPasswordVisible((prevState) => !prevState)
+  const handleTogglePasswordVisibility = useCallback(
+    () => setIsPasswordVisible((prevState) => !prevState),
+    [],
+  )
 
   return (
     <div className="flex h-screen w-screen flex-col items-center justify-center">
@@ -54,7 +59,7 @@ export const SignIn = () => {
 
         <form
           className="mx-8 mt-8 flex flex-col gap-8 sm:mx-0"
-          onSubmit={handlerSubmit}
+          onSubmit={handleSubmit}
         >
           <Input
             variant="email"

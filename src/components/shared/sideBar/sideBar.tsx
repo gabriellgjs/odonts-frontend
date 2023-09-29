@@ -55,5 +55,3 @@ const SideBar = () => {
 }
 
 export default SideBar
-
-// TODO ainda em construção

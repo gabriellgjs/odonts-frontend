@@ -65,7 +65,6 @@ const SideBar = ({ children }: SideBarProps) => {
     },
   ]
 
-  console.log(sideBarActivated)
   return (
     <>
       <div className="grid grid-cols-2 gap-2 ">

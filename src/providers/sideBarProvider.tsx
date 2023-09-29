@@ -1,5 +1,3 @@
-'use client'
-
 import SideBar from '@/components/shared/sideBar/sideBar'
 import {
   Dispatch,

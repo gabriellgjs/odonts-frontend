@@ -2,7 +2,7 @@ import { ReactNode } from 'react'
 
 import './globals.css'
 import { Roboto } from 'next/font/google'
-import NextAuthProviderSession from '@/providers/sessionProviders'
+import NextAuthProviderSession from '@providers/sessionProviders'
 
 const roboto = Roboto({
   subsets: ['latin'],

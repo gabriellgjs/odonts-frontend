@@ -1,4 +1,5 @@
+import { ReactNode } from 'react'
+
 export interface SideBarProps {
-  active: boolean
-  toggleSideBar: () => void
+  children: ReactNode
 }

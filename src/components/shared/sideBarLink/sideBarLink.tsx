@@ -1,9 +1,10 @@
 import { cn } from '@/lib/utils'
 import { cva } from 'class-variance-authority'
 import { useRouter } from 'next/navigation'
-import { cloneElement, forwardRef, memo } from 'react'
+import { cloneElement, forwardRef, memo, useCallback } from 'react'
 import colors from 'tailwindcss/colors'
 import { SideBarLinkProps } from './types/sideBarLink'
+import { signOut } from 'next-auth/react'
 
 export const sideBarLinkVariants = cva('my-3 flex  cursor-pointer', {
   variants: {
@@ -30,16 +31,19 @@ export const SideBarLink = memo(
     ) => {
       const router = useRouter()
 
-      const toggleRedirectPage = async (href: string) => {
-        if (variant === 'default') {
-          router.push(href)
-          onClick()
-          return
-        }
+      const toggleRedirectPage = useCallback(
+        async (href: string) => {
+          if (variant === 'default') {
+            router.push(href)
+            onClick()
+            return
+          }
 
-        // TODO FAZER LOGOUT
-        router.replace('/login')
-      }
+          await signOut({ redirect: false })
+          router.push('/login')
+        },
+        [onClick, router, variant],
+      )
 
       return (
         <li

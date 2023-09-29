@@ -6,7 +6,7 @@ import colors from 'tailwindcss/colors'
 import { SideBarLinkProps } from './types/sideBarLink'
 import { Logout } from '@/app/api/logout/logout'
 
-const sideBarLinkVariants = cva('my-3 flex  cursor-pointer', {
+export const sideBarLinkVariants = cva('my-3 flex  cursor-pointer', {
   variants: {
     variant: {
       default: 'rounded-lg items-center',

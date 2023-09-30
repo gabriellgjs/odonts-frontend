@@ -3,7 +3,7 @@
 import { ReactNode } from 'react'
 
 import { Header } from '@components/shared/header/header'
-import SideBarProvider from '@providers/sideBarProvider'
+import SideBarProvider from '@providers/sideBar/sideBarProvider'
 
 const NavigationLayout = ({ children }: { children: ReactNode }) => {
   return (

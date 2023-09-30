@@ -17,7 +17,7 @@ module.exports = {
     },
     extend: {
       backdropBlur: {
-        sm: '2px',
+        sm: '0.125rem',
       },
       fontFamily: {
         sans: 'var(--font-roboto)',

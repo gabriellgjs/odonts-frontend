@@ -1,7 +1,14 @@
 import { cva, type VariantProps } from 'class-variance-authority'
-import { ButtonHTMLAttributes, forwardRef } from 'react'
+import {
+  ButtonHTMLAttributes,
+  cloneElement,
+  forwardRef,
+  ReactElement,
+  ReactNode,
+} from 'react'
 
 import { cn } from '@/lib/utils'
+import { LucideProps } from 'lucide-react'
 
 const buttonVariants = cva(
   'justify-center flex items-center rounded-lg capitalize ',
@@ -15,7 +22,7 @@ const buttonVariants = cva(
       },
       size: {
         default: 'gap-3 p-2 sm:p-3',
-        outline: 'w-full my-4 gap-3 p-2 sm:p-3',
+        outline: 'w-full my-4 gap-2 p-2 sm:p-3',
       },
     },
     defaultVariants: {
@@ -27,16 +34,28 @@ const buttonVariants = cva(
 
 export interface ButtonProps
   extends ButtonHTMLAttributes<HTMLButtonElement>,
-    VariantProps<typeof buttonVariants> {}
+    VariantProps<typeof buttonVariants> {
+  icon?: ReactElement<LucideProps>
+  children: ReactNode
+}
 
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
-  ({ className, variant, size, ...rest }, ref) => {
+  ({ className, variant, size, icon, children, ...rest }, ref) => {
     return (
-      <button
-        className={cn(buttonVariants({ variant, size, className }))}
-        ref={ref}
-        {...rest}
-      />
+      <div>
+        <button
+          className={cn(buttonVariants({ variant, size, className }))}
+          ref={ref}
+          {...rest}
+        >
+          {icon &&
+            cloneElement(icon, {
+              width: 20,
+              height: 20,
+            })}
+          {children}
+        </button>
+      </div>
     )
   },
 )

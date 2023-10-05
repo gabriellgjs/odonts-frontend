@@ -21,6 +21,7 @@ import { DataTableProps } from './types/dataTableProps'
 import { Button } from '@/components/ui/button'
 import { Input } from '@/components/ui/input'
 import { useState } from 'react'
+import { Plus } from 'lucide-react'
 
 export function DataTable<TData, TValue>({
   columns,
@@ -54,7 +55,7 @@ export function DataTable<TData, TValue>({
           />
         </div>
         <div>
-          <Button variant="outline" size="outline">
+          <Button icon={<Plus />} variant="outline" size="outline">
             Criar Funcionário
           </Button>
         </div>

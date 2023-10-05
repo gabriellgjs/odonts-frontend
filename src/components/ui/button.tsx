@@ -4,16 +4,18 @@ import { ButtonHTMLAttributes, forwardRef } from 'react'
 import { cn } from '@/lib/utils'
 
 const buttonVariants = cva(
-  'justify-center flex items-center rounded-lg font-bold capitalize text-lg',
+  'justify-center flex items-center rounded-lg capitalize ',
   {
     variants: {
       variant: {
-        default: 'bg-orange-500 text-white hover:bg-orange-600',
+        default:
+          'bg-orange-500 text-white hover:bg-orange-600 text-lg font-bold',
         outline:
-          'w-full my-4 border sm:hover:border-gray-200 sm:text-gray-800 sm:bg-transparent hover:bg-stone-200',
+          ' border sm:hover:border-gray-200 sm:text-gray-800 sm:bg-transparent hover:bg-opacity-60 hover:bg-stone-200 text-base font-medium',
       },
       size: {
         default: 'gap-3 p-2 sm:p-3',
+        outline: 'w-full my-4 gap-3 p-2 sm:p-3',
       },
     },
     defaultVariants: {

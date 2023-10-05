@@ -53,7 +53,9 @@ export function DataTable<TData, TValue>({
           />
         </div>
         <div>
-          <Button variant="outline">Criar Funcionário</Button>
+          <Button variant="outline" size="outline">
+            Criar Funcionário
+          </Button>
         </div>
       </div>
       <div>

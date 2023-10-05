@@ -6,7 +6,6 @@ import colors from 'tailwindcss/colors'
 
 const inputVariants = cva(
   [
-    'flex-1',
     'rounded-lg',
     'border-2',
     'border-gray-100',
@@ -19,11 +18,13 @@ const inputVariants = cva(
   {
     variants: {
       variant: {
-        email: [''],
-        password: ['w-full'],
+        email: ['flex-1'],
+        password: ['flex-1', 'w-full'],
+        boxFinder: ['w-96'],
       },
       inputSize: {
         default: 'p-4',
+        sm: 'p-3',
       },
     },
     defaultVariants: {
@@ -50,6 +51,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
       variant,
       isPasswordVisible,
       togglePasswordVisibility,
+      inputSize,
       ...rest
     },
     ref,
@@ -64,7 +66,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
                 : 'password'
               : 'text'
           }
-          className={cn(inputVariants({ variant, className }))}
+          className={cn(inputVariants({ variant, className, inputSize }))}
           ref={ref}
           {...rest}
         />

@@ -20,11 +20,11 @@ const inputVariants = cva(
       variant: {
         email: ['flex-1'],
         password: ['flex-1', 'w-full'],
-        boxFinder: ['w-96'],
+        boxFinder: ['w-96', 'focus:border-gray-400'],
       },
       inputSize: {
         default: 'p-4',
-        sm: 'p-3 w-80',
+        sm: 'p-3',
       },
     },
     defaultVariants: {

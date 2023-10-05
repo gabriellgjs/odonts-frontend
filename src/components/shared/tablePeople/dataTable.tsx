@@ -45,6 +45,7 @@ export function DataTable<TData, TValue>({
         <div>
           <Input
             inputSize="sm"
+            variant="boxFinder"
             placeholder="Procure por nomes..."
             value={(table.getColumn('name')?.getFilterValue() as string) ?? ''}
             onChange={(event) =>

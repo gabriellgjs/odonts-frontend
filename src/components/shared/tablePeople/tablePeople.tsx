@@ -24,9 +24,7 @@ export const tablePeopleVariants = cva('', {
 const TablePeople = ({ people = [] }: TablePeopleProps) => {
   return (
     <div className="w-full">
-      <div>
-        <DataTable columns={columns} data={people} />
-      </div>
+      <DataTable columns={columns} data={people} />
     </div>
   )
 }

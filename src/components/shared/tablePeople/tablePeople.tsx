@@ -24,7 +24,6 @@ export const tablePeopleVariants = cva('', {
 const TablePeople = ({ people = [] }: TablePeopleProps) => {
   return (
     <div className="w-full">
-      <Input variant="boxFinder" placeholder={`Pesquisar por`} inputSize="sm" />
       <div>
         <DataTable columns={columns} data={people} />
       </div>

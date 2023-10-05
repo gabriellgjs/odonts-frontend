@@ -24,7 +24,7 @@ const inputVariants = cva(
       },
       inputSize: {
         default: 'p-4',
-        sm: 'p-3',
+        sm: 'p-3 w-80',
       },
     },
     defaultVariants: {

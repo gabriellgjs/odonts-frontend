@@ -22,7 +22,7 @@ const buttonVariants = cva(
       },
       size: {
         default: 'gap-3 p-2 sm:p-3',
-        outline: 'w-full my-4 gap-2 p-2 sm:p-3',
+        sm: 'w-full my-4 gap-2 p-2 sm:p-3',
       },
     },
     defaultVariants: {

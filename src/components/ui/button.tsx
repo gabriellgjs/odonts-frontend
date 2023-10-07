@@ -42,20 +42,18 @@ export interface ButtonProps
 const Button = forwardRef<HTMLButtonElement, ButtonProps>(
   ({ className, variant, size, icon, children, ...rest }, ref) => {
     return (
-      <div>
-        <button
-          className={cn(buttonVariants({ variant, size, className }))}
-          ref={ref}
-          {...rest}
-        >
-          {icon &&
-            cloneElement(icon, {
-              width: 20,
-              height: 20,
-            })}
-          {children}
-        </button>
-      </div>
+      <button
+        className={cn(buttonVariants({ variant, size, className }))}
+        ref={ref}
+        {...rest}
+      >
+        {icon &&
+          cloneElement(icon, {
+            width: 20,
+            height: 20,
+          })}
+        {children}
+      </button>
     )
   },
 )

@@ -1,13 +1,12 @@
 'use client'
 
 import {
+  ColumnFiltersState,
   flexRender,
   getCoreRowModel,
-  useReactTable,
-  ColumnFiltersState,
   getFilteredRowModel,
+  useReactTable,
 } from '@tanstack/react-table'
-
 import {
   Table,
   TableBody,
@@ -15,26 +14,18 @@ import {
   TableHead,
   TableHeader,
   TableRow,
-} from '@/components/ui/table'
-import { DataTableProps } from './types/dataTableProps'
+} from '@components/ui/table'
+import ModalCreateEmployee from '@components/funcionarios/modalCreateEmployee'
+import { Input } from '@components/ui/input'
+import { useState } from 'react'
 
-import { Button } from '@/components/ui/button'
-import { Input } from '@/components/ui/input'
-import { useCallback, useState } from 'react'
-import { Plus } from 'lucide-react'
-import ModalCreatePerson from '../modalCreatePeople/modalCreatePeople'
-import { open } from 'fs'
+import { DataTableProps } from './types/dataTableProps'
 
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const [openModalCreate, setOPenModalCreate] = useState(true)
-
-  const toggleHandleOpenModalCreate = useCallback(() => {
-    setOPenModalCreate((prevState) => !prevState)
-  }, [])
 
   const table = useReactTable({
     data,
@@ -48,7 +39,7 @@ export function DataTable<TData, TValue>({
   })
 
   return (
-    <div className="relative w-full">
+    <div className="relative w-full overflow-auto">
       <div className="rounded-md border">
         <div className="px-4 py-4 sm:flex sm:items-center sm:justify-between">
           <div>
@@ -65,7 +56,7 @@ export function DataTable<TData, TValue>({
             />
           </div>
           <div>
-            <ModalCreatePerson />
+            <ModalCreateEmployee />
           </div>
         </div>
         <div>

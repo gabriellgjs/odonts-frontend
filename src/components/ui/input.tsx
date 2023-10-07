@@ -1,8 +1,9 @@
 import { cva, type VariantProps } from 'class-variance-authority'
 import { DetailedHTMLProps, InputHTMLAttributes, forwardRef } from 'react'
-import { cn } from '@/lib/utils'
 import { Eye, EyeOff } from 'lucide-react'
 import colors from 'tailwindcss/colors'
+
+import { cn } from '@lib/utils'
 
 const inputVariants = cva(
   [
@@ -13,7 +14,7 @@ const inputVariants = cva(
     'text-gray-900',
     'focus:border-orange-500',
     'focus:outline-none',
-    'focus:placeholder:text-gray-800',
+    'placeholder:text-slate-500',
   ],
   {
     variants: {
@@ -25,6 +26,9 @@ const inputVariants = cva(
       inputSize: {
         default: 'p-4',
         sm: 'p-3',
+      },
+      sizes: {
+        email: 'w-full',
       },
     },
     defaultVariants: {
@@ -57,7 +61,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     ref,
   ) => {
     return (
-      <div className={cn('flex', variant === 'password' ? 'relative' : '')}>
+      <>
         <input
           type={
             variant === 'password'
@@ -70,6 +74,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
           ref={ref}
           {...rest}
         />
+
         {variant === 'password' && (
           <button
             onClick={togglePasswordVisibility}
@@ -83,7 +88,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             )}
           </button>
         )}
-      </div>
+      </>
     )
   },
 )

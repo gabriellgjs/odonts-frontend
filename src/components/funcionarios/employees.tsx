@@ -2,20 +2,19 @@
 
 import { useEffect, useState } from 'react'
 
-import { EmployeesProps } from './types/employeesProps'
-import { People } from '../shared/types/people'
-import TablePeople from '../shared/tablePeople/tablePeople'
+import { EmployeeProps, Employee } from './types/employeeTypes'
+import Table from './table'
 
-const Employees = ({ employees }: EmployeesProps) => {
-  const [peopleList, setPeopleList] = useState<People[]>([])
+const Employees = (props: EmployeeProps) => {
+  const [employeeList, setEmployeeList] = useState<Employee[]>([])
 
   useEffect(() => {
-    if (employees) setPeopleList(employees)
-  }, [employees])
+    if (props.employees) setEmployeeList(props.employees)
+  }, [props.employees])
 
   return (
     <div className="sm:mx-60 sm:flex">
-      <TablePeople people={peopleList} />
+      <Table employees={employeeList} />
     </div>
   )
 }

@@ -19,7 +19,7 @@ import ModalCreateEmployee from '@components/funcionarios/modalCreateEmployee'
 import { Input } from '@components/ui/input'
 import { useState } from 'react'
 
-import { DataTableProps } from './types/dataTableProps'
+import { DataTableProps } from './types/employeeTypes'
 
 export function DataTable<TData, TValue>({
   columns,

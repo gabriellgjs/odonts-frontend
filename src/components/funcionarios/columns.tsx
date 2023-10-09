@@ -1,8 +1,8 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { People } from '@components/shared/types/people'
 import { Eye, Pen, Trash2 } from 'lucide-react'
+import { Employee } from './types/employeeTypes'
 
-export const columns: ColumnDef<People>[] = [
+export const columns: ColumnDef<Employee>[] = [
   {
     accessorKey: 'name',
     header: () => <span className="text-left">Nome</span>,

@@ -1,6 +1,7 @@
+import { useRef } from 'react'
 import { columns } from './columns'
 import { DataTable } from './dataTable'
-import { EmployeeProps } from './types/employeeTypes'
+import { EmployeeProps, RefModalProps } from './types/employeeTypes'
 
 const Table = ({ employees = [] }: EmployeeProps) => {
   return (

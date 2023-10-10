@@ -9,6 +9,10 @@ export interface Employee {
 export interface EmployeeProps {
   employees?: Employee[]
 }
+export interface RefModalProps {
+  open: () => void
+  close: () => void
+}
 
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]

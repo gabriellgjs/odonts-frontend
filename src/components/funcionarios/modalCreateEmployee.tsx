@@ -18,8 +18,26 @@ import {
   CreateEmployeeSchema,
   createEmployeeFormData,
 } from './schema/CreateEmployeeSchema'
+import { useEffect, useState } from 'react'
+import { RefModalProps } from './types/employeeTypes'
 
-const ModalCreatePerson = () => {
+interface ModalCreate {
+  dialogRef: (ref: RefModalProps) => void | undefined
+}
+
+const ModalCreateEmployee = ({ dialogRef }: ModalCreate) => {
+  const [open, setOpen] = useState(false)
+
+  useEffect(() => {
+    if (dialogRef) {
+      const ref: RefModalProps = {
+        open: () => setOpen(true),
+        close: () => setOpen(false),
+      }
+      dialogRef(ref)
+    }
+  }, [dialogRef])
+
   const {
     register,
     handleSubmit,
@@ -35,7 +53,13 @@ const ModalCreatePerson = () => {
   }
 
   return (
-    <Dialog>
+    <Dialog
+      open={open}
+      onOpenChange={(isOpen) => {
+        setOpen(isOpen)
+        if (isOpen) reset()
+      }}
+    >
       <DialogTrigger asChild>
         <Button icon={<Plus />} variant="outline" size="sm">
           Criar Funcionário
@@ -233,4 +257,4 @@ const ModalCreatePerson = () => {
   )
 }
 
-export default ModalCreatePerson
+export default ModalCreateEmployee

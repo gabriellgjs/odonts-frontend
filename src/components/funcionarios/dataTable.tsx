@@ -1,12 +1,7 @@
 'use client'
 
-import {
-  ColumnFiltersState,
-  flexRender,
-  getCoreRowModel,
-  getFilteredRowModel,
-  useReactTable,
-} from '@tanstack/react-table'
+import ModalCreateEmployee from '@components/funcionarios/modalCreateEmployee'
+import { Input } from '@components/ui/input'
 import {
   Table,
   TableBody,
@@ -15,17 +10,23 @@ import {
   TableHeader,
   TableRow,
 } from '@components/ui/table'
-import ModalCreateEmployee from '@components/funcionarios/modalCreateEmployee'
-import { Input } from '@components/ui/input'
-import { useState } from 'react'
+import {
+  ColumnFiltersState,
+  flexRender,
+  getCoreRowModel,
+  getFilteredRowModel,
+  useReactTable,
+} from '@tanstack/react-table'
+import { useRef, useState } from 'react'
 
-import { DataTableProps } from './types/employeeTypes'
+import { DataTableProps, RefModalProps } from './types/employeeTypes'
 
 export function DataTable<TData, TValue>({
   columns,
   data,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
+  const refModalCreateEmployee = useRef<RefModalProps | null>(null)
 
   const table = useReactTable({
     data,
@@ -41,6 +42,9 @@ export function DataTable<TData, TValue>({
   return (
     <div className="relative w-full overflow-auto">
       <div className="rounded-md border">
+        <button onClick={() => refModalCreateEmployee.current?.open()}>
+          aqui
+        </button>
         <div className="px-4 py-4 sm:flex sm:items-center sm:justify-between">
           <div>
             <Input
@@ -56,7 +60,11 @@ export function DataTable<TData, TValue>({
             />
           </div>
           <div>
-            <ModalCreateEmployee />
+            <ModalCreateEmployee
+              dialogRef={(ref) => {
+                refModalCreateEmployee.current = ref
+              }}
+            />
           </div>
         </div>
         <div>

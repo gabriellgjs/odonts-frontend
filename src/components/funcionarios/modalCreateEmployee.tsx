@@ -1,3 +1,10 @@
+'use client'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus } from 'lucide-react'
+import { memo, useEffect, useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
+
 import { Button } from '@components/ui/button'
 import {
   Dialog,
@@ -8,24 +15,42 @@ import {
   DialogTitle,
   DialogTrigger,
 } from '@components/ui/dialog'
-import { Input } from '@components/ui/input'
-import { Label } from '@components/ui/label'
-import { Plus } from 'lucide-react'
-import { useForm } from 'react-hook-form'
-
-import { zodResolver } from '@hookform/resolvers/zod'
+import { cn } from '@lib/utils'
+import { findByCEP } from '@services/findByCEP/findByCEP'
 import {
-  CreateEmployeeSchema,
+  normalizeCEP,
+  normalizeCPF,
+  normalizeDate,
+  normalizePhoneNumber,
+  normalizeRG,
+} from '@utils/functions/normalizeInputs'
+
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@components/ui/form'
+import { Input } from '@components/ui/input'
+import {
+  Select,
+  SelectContent,
+  SelectGroup,
+  SelectItem,
+  SelectTrigger,
+  SelectValue,
+} from '@components/ui/select'
+import { CreateEmployeeSchema } from './schema/createEmployeeSchema'
+import {
+  InputsProps,
+  ModalCreateProps,
+  RefModalProps,
   createEmployeeFormData,
-} from './schema/CreateEmployeeSchema'
-import { useEffect, useState } from 'react'
-import { RefModalProps } from './types/employeeTypes'
+} from './types/employeeTypes'
 
-interface ModalCreate {
-  dialogRef: (ref: RefModalProps) => void | undefined
-}
-
-const ModalCreateEmployee = ({ dialogRef }: ModalCreate) => {
+const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
   const [open, setOpen] = useState(false)
 
   useEffect(() => {
@@ -38,26 +63,264 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreate) => {
     }
   }, [dialogRef])
 
-  const {
-    register,
-    handleSubmit,
-    reset,
-    formState: { errors },
-  } = useForm<createEmployeeFormData>({
+  const form = useForm<createEmployeeFormData>({
     resolver: zodResolver(CreateEmployeeSchema),
   })
 
-  console.log(errors)
-  const onSubmit = (data: any) => {
-    console.log(data, 'aqui')
+  const onSubmit = (data: createEmployeeFormData) => {
+    // const datesplit = data.birthDate.split('/')
+    // const dateRight = String().concat(
+    //   datesplit[1],
+    //   '-',
+    //   datesplit[0],
+    //   '-',
+    //   datesplit[2],
+    // )
+    // console.log(dayjs(dateRight).locale('pt-br'), 'teste', dateRight)
+    console.log(data)
   }
+
+  const genderOptions = useMemo(() => {
+    return [
+      {
+        value: 'Masculino',
+        selectValue: 'Masculino',
+      },
+      {
+        value: 'Feminino',
+        selectValue: 'Feminino',
+      },
+    ]
+  }, [])
+
+  const maritalStatusOptions = useMemo(() => {
+    return [
+      {
+        value: 'Solteiro (a)',
+        selectValue: 'Solteiro (a)',
+      },
+      {
+        value: 'Casado (a)',
+        selectValue: 'Casado (a)',
+      },
+      {
+        value: 'Divorciado (a)',
+        selectValue: 'Divorciado (a)',
+      },
+      {
+        value: 'Viúvo (a)',
+        selectValue: 'Viúvo (a)',
+      },
+      {
+        value: 'Outro',
+        selectValue: 'Outro',
+      },
+    ]
+  }, [])
+
+  const inputsRequire: InputsProps[] = useMemo(() => {
+    return [
+      {
+        labelTitle: 'Nome',
+        required: true,
+        inputName: 'name',
+        inputPlaceholder: 'Ex: Maria Silva',
+        errorWatcher: form.formState.errors.name?.message,
+        className: 'col-span-2',
+        isInput: true,
+      },
+      {
+        labelTitle: 'CPF',
+        required: true,
+        inputName: 'cpf',
+        inputPlaceholder: 'Ex: 123.456.789-10',
+        errorWatcher: form.formState.errors.cpf?.message,
+        isInput: true,
+        inputMax: 14,
+      },
+      {
+        labelTitle: 'RG',
+        required: true,
+        inputName: 'rg',
+        inputPlaceholder: 'Ex: 01.234.567-0',
+        errorWatcher: form.formState.errors.rg?.message,
+        isInput: true,
+        inputMax: 12,
+      },
+      {
+        labelTitle: 'Gênero',
+        required: true,
+        inputName: 'gender',
+        inputPlaceholder: 'Selecione um gênero',
+        errorWatcher: form.formState.errors.gender?.message,
+        isInput: false,
+        selectOptions: genderOptions,
+      },
+      {
+        labelTitle: 'Estado Civil',
+        required: true,
+        inputName: 'maritalStatus',
+        inputPlaceholder: 'Selecione um estado civil',
+        errorWatcher: form.formState.errors.maritalStatus?.message,
+        isInput: false,
+        selectOptions: maritalStatusOptions,
+      },
+      {
+        labelTitle: 'Telefone',
+        required: true,
+        inputName: 'telephoneNumber',
+        inputPlaceholder: 'Ex: (00) 91234-5678',
+        errorWatcher: form.formState.errors.telephoneNumber?.message,
+        isInput: true,
+      },
+      {
+        labelTitle: 'Data de Nascimento',
+        required: true,
+        inputName: 'birthDate',
+        inputPlaceholder: 'Ex: 01/01/2000',
+        errorWatcher: form.formState.errors.birthDate?.message,
+        isInput: true,
+        inputMax: 10,
+      },
+      {
+        labelTitle: 'Data de Admissão',
+        required: true,
+        inputName: 'hireDate',
+        inputPlaceholder: 'Ex: 01/01/2000',
+        errorWatcher: form.formState.errors.hireDate?.message,
+        isInput: true,
+        inputMax: 10,
+      },
+      {
+        labelTitle: 'CEP',
+        required: true,
+        inputName: 'postalCode',
+        inputPlaceholder: 'Ex: 12345-678',
+        errorWatcher: form.formState.errors.postalCode?.message,
+        isInput: true,
+        inputMax: 9,
+      },
+      {
+        labelTitle: 'Estado',
+        required: true,
+        inputName: 'state',
+        disable: true,
+        inputPlaceholder: 'Ex: Paraná',
+        errorWatcher: form.formState.errors.state?.message,
+        isInput: true,
+      },
+      {
+        labelTitle: 'Cidade',
+        required: true,
+        inputName: 'city',
+        disable: true,
+        inputPlaceholder: 'Ex: Curitiba',
+        errorWatcher: form.formState.errors.city?.message,
+        isInput: true,
+      },
+      {
+        labelTitle: 'Rua',
+        inputName: 'street',
+        required: true,
+        inputPlaceholder: 'Ex: Rua das ruas',
+        errorWatcher: form.formState.errors.street?.message,
+        isInput: true,
+      },
+      {
+        labelTitle: 'Número',
+        inputName: 'number',
+        required: true,
+        inputPlaceholder: 'Ex: 1001',
+        errorWatcher: form.formState.errors.number?.message,
+        isInput: true,
+      },
+      {
+        labelTitle: 'Bairro',
+        inputName: 'district',
+        required: true,
+        inputPlaceholder: 'Ex: Centro',
+        errorWatcher: form.formState.errors.district?.message,
+        isInput: true,
+      },
+    ]
+  }, [
+    form.formState.errors.name?.message,
+    form.formState.errors.cpf?.message,
+    form.formState.errors.rg?.message,
+    form.formState.errors.gender?.message,
+    form.formState.errors.maritalStatus?.message,
+    form.formState.errors.telephoneNumber?.message,
+    form.formState.errors.birthDate?.message,
+    form.formState.errors.hireDate?.message,
+    form.formState.errors.postalCode?.message,
+    form.formState.errors.state?.message,
+    form.formState.errors.city?.message,
+    form.formState.errors.street?.message,
+    form.formState.errors.number?.message,
+    form.formState.errors.district?.message,
+    genderOptions,
+    maritalStatusOptions,
+  ])
+
+  const cpfValueWatch = form.watch('cpf')
+  const rgValueWatch = form.watch('rg')
+  const phoneValueWatch = form.watch('telephoneNumber')
+  const birthDateValueWatch = form.watch('birthDate')
+  const hireDateValueWatch = form.watch('hireDate')
+  const postalCodeValueWatch = form.watch('postalCode')
+
+  useEffect(() => {
+    form.setValue('cpf', normalizeCPF(cpfValueWatch))
+  }, [cpfValueWatch, form])
+
+  useEffect(() => {
+    form.setValue('birthDate', normalizeDate(birthDateValueWatch))
+  }, [birthDateValueWatch, form])
+
+  useEffect(() => {
+    form.setValue('hireDate', normalizeDate(hireDateValueWatch))
+  }, [hireDateValueWatch, form])
+
+  useEffect(() => {
+    form.setValue('rg', normalizeRG(rgValueWatch))
+  }, [rgValueWatch, form])
+
+  useEffect(() => {
+    form.setValue('telephoneNumber', normalizePhoneNumber(phoneValueWatch))
+  }, [phoneValueWatch, form])
+
+  useEffect(() => {
+    form.setValue('postalCode', normalizeCEP(postalCodeValueWatch))
+    if (postalCodeValueWatch && postalCodeValueWatch.length === 9) {
+      const cep = async () => {
+        const response = await findByCEP(postalCodeValueWatch).then(
+          (data) => data,
+        )
+
+        if (response?.erro) {
+          console.log('deu erro aqui mlk')
+          form.setError('postalCode', {
+            type: 'custom',
+            message: 'CEP inválido',
+          })
+          return
+        }
+        form.clearErrors('postalCode')
+        form.setValue('city', response?.localidade ?? '')
+        form.setValue('state', response?.uf ?? '')
+        console.log(response)
+      }
+
+      cep()
+    }
+  }, [postalCodeValueWatch, form])
 
   return (
     <Dialog
       open={open}
       onOpenChange={(isOpen) => {
         setOpen(isOpen)
-        if (isOpen) reset()
+        if (isOpen) form.reset()
       }}
     >
       <DialogTrigger asChild>
@@ -67,194 +330,95 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreate) => {
       </DialogTrigger>
 
       <DialogContent className="sm:min-w-fit">
-        <form onSubmit={handleSubmit(onSubmit)}>
-          <DialogHeader className="mt-20 sm:mt-0">
-            <DialogTitle>Criar novo funcionário</DialogTitle>
-            <DialogDescription>Crie um novo funcionário</DialogDescription>
-          </DialogHeader>
-          <div className="flex grid-cols-3 flex-col gap-5 py-4">
-            <div className="relative col-span-3 mb-1 flex w-full flex-col items-start gap-2">
-              <Label htmlFor="name" required>
-                Nome
-              </Label>
-
-              <Input
-                {...register('name')}
-                placeholder="Ex: Maria Silva"
-                className="w-full"
-              />
-              {errors.name?.message && (
-                <span
-                  className=" absolute -bottom-6
-                   text-xs"
-                >
-                  {errors.name?.message}
-                </span>
+        <Form {...form}>
+          <form onSubmit={form.handleSubmit(onSubmit)}>
+            <DialogHeader className="mt-20 sm:mt-0">
+              <DialogTitle>Criar novo funcionário</DialogTitle>
+              <DialogDescription>Crie um novo funcionário</DialogDescription>
+            </DialogHeader>
+            <div className="grid grid-cols-3 gap-5 py-4">
+              {inputsRequire.map((input, index) =>
+                input.isInput ? (
+                  <FormField
+                    key={index}
+                    control={form.control}
+                    name={input.inputName}
+                    render={({ field }) => (
+                      <FormItem className={input?.className}>
+                        <FormLabel required>{input.labelTitle}</FormLabel>
+                        <FormControl>
+                          <Input
+                            {...field}
+                            disabled={input.disable}
+                            maxLength={input.inputMax}
+                            placeholder={input.inputPlaceholder}
+                            className={cn(
+                              'w-full',
+                              input.errorWatcher
+                                ? 'border-red-400 focus:border-red-400'
+                                : '',
+                            )}
+                          />
+                        </FormControl>
+                        <FormMessage />
+                      </FormItem>
+                    )}
+                  />
+                ) : (
+                  <FormField
+                    key={index}
+                    control={form.control}
+                    name={input.inputName}
+                    render={({ field }) => (
+                      <FormItem className={input?.className}>
+                        <FormLabel required>{input.labelTitle}</FormLabel>
+                        <Select
+                          onValueChange={field.onChange}
+                          defaultValue={field.value}
+                        >
+                          <FormControl>
+                            <SelectTrigger
+                              className={cn(
+                                input.errorWatcher
+                                  ? 'border-red-400 focus:border-red-400'
+                                  : '',
+                              )}
+                            >
+                              <SelectValue
+                                className="w-full text-slate-500"
+                                placeholder={input.inputPlaceholder}
+                              />
+                            </SelectTrigger>
+                          </FormControl>
+                          <FormMessage />
+                          <SelectContent className="w-full">
+                            <SelectGroup>
+                              {input.selectOptions &&
+                                input.selectOptions.map((option, index) => (
+                                  <SelectItem key={index} value={option.value}>
+                                    {option.selectValue}
+                                  </SelectItem>
+                                ))}
+                            </SelectGroup>
+                          </SelectContent>
+                        </Select>
+                      </FormItem>
+                    )}
+                  />
+                ),
               )}
             </div>
 
-            {/* <div className="relative flex flex-col items-start gap-4">
-              <div className="absolute">
-                <Label htmlFor="cpf" required>
-                  CPF
-                </Label>
-                <Input placeholder="Ex: 123.456.789-10" />
-                {errors.cpf?.message && (
-                  <span className="bottom-2 text-xs">
-                    {errors.cpf?.message}
-                  </span>
-                )}
-              </div>
-            </div> */}
-
-            {/* <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="rg" required>
-                RG
-              </Label>
-              <Input placeholder="Ex: 12.345.678-9" />
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="pisPasep" required>
-                PIS/PASEP
-              </Label>
-              <Input placeholder="Ex: 000.00000.00-0" />
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="genero" required>
-                Gênero
-              </Label>
-
-              <Select>
-                <SelectTrigger>
-                  <SelectValue
-                    className="text-slate-500"
-                    placeholder="Selecione um gênero"
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="Masculino">Masculino</SelectItem>
-                    <SelectItem value="Feminino">Feminino</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="dataAdmissao" required>
-                Estado Civil
-              </Label>
-              <Select>
-                <SelectTrigger>
-                  <SelectValue
-                    className="text-slate-500"
-                    placeholder="Selecione um estado civil"
-                  />
-                </SelectTrigger>
-                <SelectContent>
-                  <SelectGroup>
-                    <SelectItem value="Solteiro (a)">Solteiro (a)</SelectItem>
-                    <SelectItem value="Casado (a)">Casado (a)</SelectItem>
-                    <SelectItem value="Divorciado (a)">
-                      Divorciado (a)
-                    </SelectItem>
-                    <SelectItem value="Viúvo (a)">Viúvo (a)</SelectItem>
-                    <SelectItem value="Outro">Outro</SelectItem>
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="celular" required>
-                Celular
-              </Label>
-              <Input placeholder="Ex: (00) 91234-5678" />
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="dataNascimento" required>
-                Data de Nascimento
-              </Label>
-              <Input placeholder="Ex: 01/01/1991" />
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="dataAdmissao" required>
-                Data de Admissão
-              </Label>
-              <Input placeholder="Ex: 01/01/1991" />
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="dataDesligamento" required>
-                Data de Desligamento
-              </Label>
-              <Input placeholder="Ex: 01/01/1991" />
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="cep" required>
-                CEP
-              </Label>
-              <Input placeholder="Ex: 12345-678" />
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="estado" required>
-                Estado
-              </Label>
-              <Input
-                placeholder="Ex: Paraná"
-                disabled
-                className="cursor-not-allowed"
-              />
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="cidade" required>
-                Cidade
-              </Label>
-              <Input
-                placeholder="Ex: Curitiba"
-                disabled
-                className="cursor-not-allowed"
-              />
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="rua" required>
-                Rua
-              </Label>
-              <Input placeholder="Ex: Rua da Liberdade" />
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="numero" required>
-                Número
-              </Label>
-              <Input placeholder="Ex: 1000" />
-            </div>
-
-            <div className="flex flex-col items-start gap-4">
-              <Label htmlFor="bairro" required>
-                Bairro
-              </Label>
-              <Input placeholder="Ex: Centro" />
-            </div> */}
-          </div>
-
-          <DialogFooter className="flex w-full items-center justify-center">
-            <Button type="submit" className="w-48">
-              Salvar
-            </Button>
-          </DialogFooter>
-        </form>
+            <DialogFooter className="flex w-full items-center justify-center">
+              <Button type="submit" className="w-48">
+                Salvar
+              </Button>
+            </DialogFooter>
+          </form>
+        </Form>
       </DialogContent>
     </Dialog>
   )
 }
 
-export default ModalCreateEmployee
+export default memo(ModalCreateEmployee)

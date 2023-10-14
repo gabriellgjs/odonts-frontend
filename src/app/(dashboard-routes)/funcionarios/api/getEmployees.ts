@@ -3,7 +3,7 @@ import { getServerSession } from 'next-auth'
 import { cache } from 'react'
 
 import nextAuthOptions from '@/app/api/auth/[...nextauth]/nextAuthOptions'
-import { People } from '@components/shared/types/people'
+import { Employee } from '@components/funcionarios/types/employeeTypes'
 
 const getEmployees = cache(async () => {
   try {
@@ -17,7 +17,7 @@ const getEmployees = cache(async () => {
           Authorization: `Bearer ${token}`,
         },
       })
-      .then((response): People[] => response.data.response)
+      .then((response): Employee[] => response.data.response)
     return employees
   } catch (error) {
     console.log(error)
@@ -25,5 +25,3 @@ const getEmployees = cache(async () => {
 })
 
 export default getEmployees
-
-// TODO REACT CACHE

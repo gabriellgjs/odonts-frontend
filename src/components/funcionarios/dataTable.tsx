@@ -42,9 +42,6 @@ export function DataTable<TData, TValue>({
   return (
     <div className="relative w-full overflow-auto">
       <div className="rounded-md border">
-        <button onClick={() => refModalCreateEmployee.current?.open()}>
-          aqui
-        </button>
         <div className="px-4 py-4 sm:flex sm:items-center sm:justify-between">
           <div>
             <Input

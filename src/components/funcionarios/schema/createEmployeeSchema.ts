@@ -10,7 +10,14 @@ export const CreateEmployeeSchema = z.object({
     })
     .trim()
     .min(1, 'Nome é obrigatório')
-    .regex(RegexName, 'Nome só pode conter números ou letras'),
+    .regex(RegexName, 'Nome só pode conter letras'),
+  email: z
+    .string({
+      required_error: 'E-mail é obrigatório',
+    })
+    .trim()
+    .min(1, 'E-mail é obrigatório')
+    .email('E-mail inválido'),
   birthDate: z
     .string({
       required_error: 'Data de nascimento é obrigatória',
@@ -63,7 +70,7 @@ export const CreateEmployeeSchema = z.object({
   }),
   telephoneNumber: z
     .string({
-      required_error: 'Celular é obrigatório',
+      required_error: 'Telefone é obrigatório',
     })
     .regex(regexTelephone, 'Telefone inválido'),
   maritalStatus: z.string({

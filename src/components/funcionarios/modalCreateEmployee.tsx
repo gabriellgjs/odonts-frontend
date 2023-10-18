@@ -126,7 +126,16 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
         inputName: 'name',
         inputPlaceholder: 'Ex: Maria Silva',
         errorWatcher: form.formState.errors.name?.message,
+        className: 'col-span-3',
+        isInput: true,
+      },
+      {
+        labelTitle: 'E-mail',
+        required: true,
+        inputName: 'email',
+        inputPlaceholder: 'Ex: joao@gmail.com',
         className: 'col-span-2',
+        errorWatcher: form.formState.errors.email?.message,
         isInput: true,
       },
       {
@@ -222,7 +231,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
         labelTitle: 'Rua',
         inputName: 'street',
         required: true,
-        inputPlaceholder: 'Ex: Rua das ruas',
+        inputPlaceholder: 'Ex: Rua das flores',
         errorWatcher: form.formState.errors.street?.message,
         isInput: true,
       },
@@ -245,6 +254,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
     ]
   }, [
     form.formState.errors.name?.message,
+    form.formState.errors.email?.message,
     form.formState.errors.cpf?.message,
     form.formState.errors.rg?.message,
     form.formState.errors.gender?.message,
@@ -306,6 +316,8 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
           return
         }
         form.clearErrors('postalCode')
+        form.clearErrors('state')
+        form.clearErrors('city')
         form.setValue('city', response?.localidade ?? '')
         form.setValue('state', response?.uf ?? '')
         console.log(response)

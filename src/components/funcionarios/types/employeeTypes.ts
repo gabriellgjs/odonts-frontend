@@ -31,6 +31,7 @@ export interface InputsProps {
   disable?: boolean
   inputName:
     | 'name'
+    | 'email'
     | 'rg'
     | 'cpf'
     | 'gender'

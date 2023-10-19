@@ -41,6 +41,9 @@ export const CreateEmployeeSchema = z.object({
   gender: z.string({
     required_error: 'Gênero é obrigatório',
   }),
+  roleId: z.string({
+    required_error: 'Cargo é obrigatório',
+  }),
   hireDate: z
     .string({
       required_error: 'Data de admissão é obrigatória',

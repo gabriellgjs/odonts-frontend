@@ -25,6 +25,7 @@ import {
   normalizeRG,
 } from '@utils/functions/normalizeInputs'
 
+import { api } from '@/lib/axios'
 import {
   Form,
   FormControl,
@@ -42,16 +43,21 @@ import {
   SelectTrigger,
   SelectValue,
 } from '@components/ui/select'
+import { useSession } from 'next-auth/react'
 import { CreateEmployeeSchema } from './schema/createEmployeeSchema'
 import {
   InputsProps,
   ModalCreateProps,
   RefModalProps,
+  RoleOption,
+  SelectOptionsProps,
   createEmployeeFormData,
 } from './types/employeeTypes'
 
 const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
   const [open, setOpen] = useState(false)
+  const [rolesOptions, setRolesOptions] = useState<SelectOptionsProps>([])
+  const { data } = useSession()
 
   useEffect(() => {
     if (dialogRef) {
@@ -80,6 +86,30 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
     console.log(data)
   }
 
+  useEffect(() => {
+    const roleOptions = async () => {
+      const response = await api
+        .get('/roles', {
+          headers: {
+            Authorization: `Bearer ${data?.user.token}`,
+          },
+        })
+        .then((response): RoleOption => response.data.results)
+
+      const roleOptions: SelectOptionsProps = response.map((role) => {
+        const values = {
+          value: role.id,
+          selectValue: role.description,
+        }
+        return values
+      })
+
+      setRolesOptions(roleOptions)
+    }
+    if (data?.user.token) {
+      roleOptions()
+    }
+  }, [data?.user.token])
   const genderOptions = useMemo(() => {
     return [
       {
@@ -126,16 +156,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
         inputName: 'name',
         inputPlaceholder: 'Ex: Maria Silva',
         errorWatcher: form.formState.errors.name?.message,
-        className: 'col-span-3',
-        isInput: true,
-      },
-      {
-        labelTitle: 'E-mail',
-        required: true,
-        inputName: 'email',
-        inputPlaceholder: 'Ex: joao@gmail.com',
         className: 'col-span-2',
-        errorWatcher: form.formState.errors.email?.message,
         isInput: true,
       },
       {
@@ -148,6 +169,15 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
         inputMax: 14,
       },
       {
+        labelTitle: 'E-mail',
+        required: true,
+        inputName: 'email',
+        inputPlaceholder: 'Ex: joao@gmail.com',
+        className: 'col-span-2',
+        errorWatcher: form.formState.errors.email?.message,
+        isInput: true,
+      },
+      {
         labelTitle: 'RG',
         required: true,
         inputName: 'rg',
@@ -155,6 +185,15 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
         errorWatcher: form.formState.errors.rg?.message,
         isInput: true,
         inputMax: 12,
+      },
+      {
+        labelTitle: 'Cargo',
+        required: true,
+        inputName: 'roleId',
+        inputPlaceholder: 'Selecione um cargo',
+        errorWatcher: form.formState.errors.roleId?.message,
+        isInput: false,
+        selectOptions: rolesOptions,
       },
       {
         labelTitle: 'Gênero',
@@ -214,6 +253,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
         required: true,
         inputName: 'state',
         disable: true,
+        className: 'disabled:text-gray-900',
         inputPlaceholder: 'Ex: Paraná',
         errorWatcher: form.formState.errors.state?.message,
         isInput: true,
@@ -224,6 +264,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
         inputName: 'city',
         disable: true,
         inputPlaceholder: 'Ex: Curitiba',
+        className: 'disabled:text-gray-900',
         errorWatcher: form.formState.errors.city?.message,
         isInput: true,
       },
@@ -257,6 +298,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
     form.formState.errors.email?.message,
     form.formState.errors.cpf?.message,
     form.formState.errors.rg?.message,
+    form.formState.errors.roleId?.message,
     form.formState.errors.gender?.message,
     form.formState.errors.maritalStatus?.message,
     form.formState.errors.telephoneNumber?.message,
@@ -268,6 +310,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
     form.formState.errors.street?.message,
     form.formState.errors.number?.message,
     form.formState.errors.district?.message,
+    rolesOptions,
     genderOptions,
     maritalStatusOptions,
   ])
@@ -308,7 +351,6 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
         )
 
         if (response?.erro) {
-          console.log('deu erro aqui mlk')
           form.setError('postalCode', {
             type: 'custom',
             message: 'CEP inválido',
@@ -320,7 +362,6 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
         form.clearErrors('city')
         form.setValue('city', response?.localidade ?? '')
         form.setValue('state', response?.uf ?? '')
-        console.log(response)
       }
 
       cep()
@@ -407,7 +448,10 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
                             <SelectGroup>
                               {input.selectOptions &&
                                 input.selectOptions.map((option, index) => (
-                                  <SelectItem key={index} value={option.value}>
+                                  <SelectItem
+                                    key={index}
+                                    value={String(option.value)}
+                                  >
                                     {option.selectValue}
                                   </SelectItem>
                                 ))}

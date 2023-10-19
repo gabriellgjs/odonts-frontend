@@ -1,5 +1,5 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { z } from 'zod'
+import { number, object, string, z } from 'zod'
 import { CreateEmployeeSchema } from '../schema/createEmployeeSchema'
 
 export interface Employee {
@@ -25,6 +25,19 @@ export interface ModalCreateProps {
   dialogRef: (ref: RefModalProps) => void | undefined
 }
 
+export type createEmployeeFormData = z.infer<typeof CreateEmployeeSchema>
+
+export type RoleOption = {
+  id: number
+  name: string
+  description: string
+}[]
+
+export type SelectOptionsProps = {
+  value: string | number
+  selectValue: string
+}[]
+
 export interface InputsProps {
   labelTitle: string
   required: boolean
@@ -34,6 +47,7 @@ export interface InputsProps {
     | 'email'
     | 'rg'
     | 'cpf'
+    | 'roleId'
     | 'gender'
     | 'maritalStatus'
     | 'telephoneNumber'
@@ -50,10 +64,5 @@ export interface InputsProps {
   className?: string
   isInput: boolean
   inputMax?: number
-  selectOptions?: {
-    value: string
-    selectValue: string
-  }[]
+  selectOptions?: SelectOptionsProps
 }
-
-export type createEmployeeFormData = z.infer<typeof CreateEmployeeSchema>

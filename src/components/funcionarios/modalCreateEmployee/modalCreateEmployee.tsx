@@ -1,20 +1,17 @@
 'use client'
 
-import { zodResolver } from '@hookform/resolvers/zod'
-import { Plus } from 'lucide-react'
-import { memo, useEffect, useMemo, useState } from 'react'
-import { useForm } from 'react-hook-form'
-
 import { Button } from '@components/ui/button'
+import { DialogFooter, DialogHeader } from '@components/ui/dialog'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogFooter,
-  DialogHeader,
-  DialogTitle,
-  DialogTrigger,
-} from '@components/ui/dialog'
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@components/ui/form'
+import { Input } from '@components/ui/input'
+import { useToast } from '@components/ui/use-toast'
+import api from '@lib/axios'
 import { cn } from '@lib/utils'
 import { findByCEP } from '@services/findByCEP/findByCEP'
 import {
@@ -24,17 +21,13 @@ import {
   normalizePhoneNumber,
   normalizeRG,
 } from '@utils/functions/normalizeInputs'
-
-import { api } from '@/lib/axios'
 import {
-  Form,
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@components/ui/form'
-import { Input } from '@components/ui/input'
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogTitle,
+  DialogTrigger,
+} from '@radix-ui/react-dialog'
 import {
   Select,
   SelectContent,
@@ -42,9 +35,13 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@components/ui/select'
+} from '@radix-ui/react-select'
+import { Plus } from 'lucide-react'
 import { useSession } from 'next-auth/react'
-import { CreateEmployeeSchema } from './schema/createEmployeeSchema'
+import { useRouter } from 'next/navigation'
+import { memo, useEffect, useMemo, useState } from 'react'
+import { Form, useForm } from 'react-hook-form'
+import { CreateEmployeeSchema } from '../schema/createEmployeeSchema'
 import {
   InputsProps,
   ModalCreateProps,
@@ -52,12 +49,24 @@ import {
   RoleOption,
   SelectOptionsProps,
   createEmployeeFormData,
-} from './types/employeeTypes'
+} from '../types/employeeTypes'
+import { zodResolver } from '@hookform/resolvers/zod'
 
 const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
   const [open, setOpen] = useState(false)
   const [rolesOptions, setRolesOptions] = useState<SelectOptionsProps>([])
   const { data } = useSession()
+  const router = useRouter()
+  const { toast } = useToast()
+  const form = useForm<createEmployeeFormData>({
+    resolver: zodResolver(CreateEmployeeSchema),
+  })
+  const cpfValueWatch = form.watch('cpf')
+  const rgValueWatch = form.watch('rg')
+  const phoneValueWatch = form.watch('telephoneNumber')
+  const birthDateValueWatch = form.watch('birthDate')
+  const hireDateValueWatch = form.watch('hireDate')
+  const postalCodeValueWatch = form.watch('postalCode')
 
   useEffect(() => {
     if (dialogRef) {
@@ -69,21 +78,46 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
     }
   }, [dialogRef])
 
-  const form = useForm<createEmployeeFormData>({
-    resolver: zodResolver(CreateEmployeeSchema),
-  })
+  const onSubmit = (dataForm: createEmployeeFormData) => {
+    const refactorData = {
+      ...dataForm,
+      roleId: Number(dataForm.roleId),
+      address: {
+        street: dataForm.street,
+        number: dataForm.number,
+        district: dataForm.district,
+        city: dataForm.city,
+        postalCode: dataForm.postalCode,
+        state: dataForm.state,
+      },
+      telephone: {
+        telephoneNumber: dataForm.telephoneNumber,
+      },
+    }
+    const request = async () => {
+      await api
+        .post('/employees', refactorData)
+        .then(() => {
+          toast({
+            title: 'Sucesso',
+            description: 'Funcionário criado com sucesso',
+          })
+          setOpen(false)
+        })
+        .catch((error) => {
+          console.log(error)
+          toast({
+            title: 'Atenção',
+            variant: 'destructive',
+            description: 'Error ao criar funcionário',
+          })
+        })
+        .finally(() => {
+          router.refresh()
+        })
+    }
 
-  const onSubmit = (data: createEmployeeFormData) => {
-    // const datesplit = data.birthDate.split('/')
-    // const dateRight = String().concat(
-    //   datesplit[1],
-    //   '-',
-    //   datesplit[0],
-    //   '-',
-    //   datesplit[2],
-    // )
-    // console.log(dayjs(dateRight).locale('pt-br'), 'teste', dateRight)
-    console.log(data)
+    request()
   }
 
   useEffect(() => {
@@ -110,6 +144,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
       roleOptions()
     }
   }, [data?.user.token])
+
   const genderOptions = useMemo(() => {
     return [
       {
@@ -314,13 +349,6 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
     genderOptions,
     maritalStatusOptions,
   ])
-
-  const cpfValueWatch = form.watch('cpf')
-  const rgValueWatch = form.watch('rg')
-  const phoneValueWatch = form.watch('telephoneNumber')
-  const birthDateValueWatch = form.watch('birthDate')
-  const hireDateValueWatch = form.watch('hireDate')
-  const postalCodeValueWatch = form.watch('postalCode')
 
   useEffect(() => {
     form.setValue('cpf', normalizeCPF(cpfValueWatch))

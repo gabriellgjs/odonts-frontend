@@ -4,7 +4,7 @@ import { EmployeeProps } from './types/employeeTypes'
 
 const Table = ({ employees = [] }: EmployeeProps) => {
   return (
-    <div className="sm:w-full">
+    <div className="pb-16 sm:w-full">
       <DataTable columns={columns} data={employees} />
     </div>
   )

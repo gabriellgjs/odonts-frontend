@@ -1,6 +1,6 @@
 'use client'
 
-import ModalCreateEmployee from '@components/funcionarios/modalCreateEmployee'
+import ModalCreateEmployee from '@components/funcionarios/modalCreateEmployee/modalCreateEmployee'
 import { Input } from '@components/ui/input'
 import {
   Table,

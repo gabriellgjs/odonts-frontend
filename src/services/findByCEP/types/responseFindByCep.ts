@@ -1,4 +1,4 @@
-export interface ResponseFindByCep {
+export type ResponseFindByCep = {
   erro?: boolean
   cep: string
   localidade: string

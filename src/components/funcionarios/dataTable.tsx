@@ -1,6 +1,5 @@
 'use client'
 
-import ModalCreateEmployee from '@components/funcionarios/modalCreateEmployee/modalCreateEmployee'
 import { Input } from '@components/ui/input'
 import {
   Table,
@@ -15,19 +14,28 @@ import {
   flexRender,
   getCoreRowModel,
   getFilteredRowModel,
+  getPaginationRowModel,
   useReactTable,
 } from '@tanstack/react-table'
-import { useRef, useState } from 'react'
+import { useState } from 'react'
 
-import { DataTableProps, RefModalProps } from './types/employeeTypes'
+import { Eye, Pen, UserCheck2, UserX2 } from 'lucide-react'
+import { Button } from '../ui/button'
+import ModalCreateEmployee from './modalCreateEmployee'
+import ModalEditEmployee from './modalEditEmployee'
+import ModalViewEmployee from './modalViewEmployee'
+import { DataTableProps, Employee } from './types/employeeTypes'
+import StatusEmployeeButton from './statusEmployeeButton'
 
-export function DataTable<TData, TValue>({
+export function DataTable<TData extends Employee, TValue>({
   columns,
   data,
+  refModalCreate,
+  refModalEdit,
+  refModalView,
+  refModalStatus,
 }: DataTableProps<TData, TValue>) {
   const [columnFilters, setColumnFilters] = useState<ColumnFiltersState>([])
-  const refModalCreateEmployee = useRef<RefModalProps | null>(null)
-
   const table = useReactTable({
     data,
     columns,
@@ -37,7 +45,44 @@ export function DataTable<TData, TValue>({
     state: {
       columnFilters,
     },
+    getPaginationRowModel: getPaginationRowModel(),
+    initialState: {
+      pagination: {
+        pageSize: 7,
+      },
+    },
   })
+
+  const ModalCreate = (
+    <ModalCreateEmployee
+      dialogRef={(ref) => {
+        if (refModalCreate) refModalCreate.current = ref
+      }}
+    />
+  )
+
+  const ModalEdit = (
+    <ModalEditEmployee
+      dialogRef={(ref) => {
+        if (refModalEdit) refModalEdit.current = ref
+      }}
+    />
+  )
+
+  const ModalView = (
+    <ModalViewEmployee
+      dialogRef={(ref) => {
+        if (refModalView) refModalView.current = ref
+      }}
+    />
+  )
+  const ModalStatus = (
+    <StatusEmployeeButton
+      dialogRef={(ref) => {
+        if (refModalStatus) refModalStatus.current = ref
+      }}
+    />
+  )
 
   return (
     <div className="relative w-full overflow-auto">
@@ -57,14 +102,33 @@ export function DataTable<TData, TValue>({
             />
           </div>
           <div>
-            <ModalCreateEmployee
-              dialogRef={(ref) => {
-                refModalCreateEmployee.current = ref
-              }}
-            />
+            {ModalCreate}
+            {ModalView}
+            {ModalEdit}
+            {ModalStatus}
           </div>
         </div>
         <div>
+          <div className="flex items-center justify-end space-x-2 px-6 sm:px-4">
+            <Button
+              variant="outline"
+              size="sm"
+              className="sm:bg-stone-200"
+              onClick={() => table.previousPage()}
+              disabled={!table.getCanPreviousPage()}
+            >
+              Anterior
+            </Button>
+            <Button
+              variant="outline"
+              size="sm"
+              className="sm:bg-stone-200"
+              onClick={() => table.nextPage()}
+              disabled={!table.getCanNextPage()}
+            >
+              Próxima
+            </Button>
+          </div>
           <Table>
             <TableHeader>
               {table.getHeaderGroups().map((headerGroup) => (
@@ -99,6 +163,34 @@ export function DataTable<TData, TValue>({
                         )}
                       </TableCell>
                     ))}
+                    <td className="mr-4 flex items-center justify-end gap-4 py-4">
+                      <Button
+                        onClick={() => {
+                          refModalView?.current?.open(row.original.id)
+                        }}
+                        variant="outline"
+                        icon={<Eye />}
+                      />
+
+                      <Button variant="outline" icon={<Pen />} />
+
+                      <Button
+                        variant="outline"
+                        icon={
+                          row.original.status === 'ativo' ? (
+                            <UserX2 />
+                          ) : (
+                            <UserCheck2 />
+                          )
+                        }
+                        onClick={() => {
+                          refModalStatus?.current?.open(
+                            row.original.id,
+                            row.original.status === 'ativo',
+                          )
+                        }}
+                      />
+                    </td>
                   </TableRow>
                 ))
               ) : (

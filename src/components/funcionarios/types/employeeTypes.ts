@@ -1,27 +1,59 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { number, object, string, z } from 'zod'
+import { MutableRefObject, ReactNode } from 'react'
+import { z } from 'zod'
 import { CreateEmployeeSchema } from '../schema/createEmployeeSchema'
 
 export interface Employee {
   id: string
   name: string
   telephone: string
+  status: string
+}
+
+export interface GetEmployee {
+  id: number
+  name: string
+  birthDate: string
+  cpf: string
+  gender: string
+  email: string
+  role: string
+  hireDate: string
+  maritalStatus: string
+  rg: string
+  telephone: {
+    id: number
+    telephoneNumber: string
+  }
+  address: {
+    id: number
+    city: string
+    district: string
+    number: string
+    postalCode: string
+    state: string
+    street: string
+  }
 }
 
 export interface EmployeeProps {
   employees?: Employee[]
 }
 export interface RefModalProps {
-  open: () => void
+  open: (id?: string | number, isActive?: boolean) => void
   close: () => void
 }
 
 export interface DataTableProps<TData, TValue> {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
+  refModalCreate?: MutableRefObject<RefModalProps | null>
+  refModalEdit?: MutableRefObject<RefModalProps | null>
+  refModalView?: MutableRefObject<RefModalProps | null>
+  refModalStatus?: MutableRefObject<RefModalProps | null>
 }
 
-export interface ModalCreateProps {
+export interface ModalProps {
   dialogRef: (ref: RefModalProps) => void | undefined
 }
 
@@ -42,6 +74,7 @@ export interface InputsProps {
   labelTitle: string
   required: boolean
   disable?: boolean
+  defaultValue?: string
   inputName:
     | 'name'
     | 'email'
@@ -60,7 +93,7 @@ export interface InputsProps {
     | 'district'
     | 'city'
   inputPlaceholder: string
-  errorWatcher: string | undefined
+  errorWatcher?: string | undefined
   className?: string
   isInput: boolean
   inputMax?: number

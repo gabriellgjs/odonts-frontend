@@ -1,5 +1,4 @@
 import { ColumnDef } from '@tanstack/react-table'
-import { Eye, Pen, Trash2 } from 'lucide-react'
 import { Employee } from './types/employeeTypes'
 
 export const columns: ColumnDef<Employee>[] = [
@@ -24,16 +23,15 @@ export const columns: ColumnDef<Employee>[] = [
     },
   },
   {
-    accessorKey: 'actions',
-    header: () => <></>,
+    accessorKey: 'status',
+    header: () => (
+      <div className="w-32">
+        <span className="text-left">Status</span>
+      </div>
+    ),
     cell: ({ row }) => {
-      return (
-        <div className="flex justify-end gap-4">
-          <Eye />
-          <Pen />
-          <Trash2 />
-        </div>
-      )
+      const status = String(row.getValue('status'))
+      return <div className="text-left capitalize">{status}</div>
     },
   },
 ]

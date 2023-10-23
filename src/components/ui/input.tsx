@@ -6,16 +6,8 @@ import colors from 'tailwindcss/colors'
 import { cn } from '@lib/utils'
 
 const inputVariants = cva(
-  [
-    'rounded-lg',
-    'border-2',
-    'border-gray-100',
-    'text-base',
-    'text-gray-900',
-    'focus:border-orange-500',
-    'focus:outline-none',
-    'placeholder:text-slate-500',
-  ],
+  'rounded-lg border-2 border-gray-100 text-base text-gray-900 focus:border-orange-500 focus:outline-none placeholder:text-slate-500 disabled:cursor-not-allowed',
+
   {
     variants: {
       variant: {

@@ -1,17 +1,22 @@
 'use client'
 
+'use client'
+
+import { zodResolver } from '@hookform/resolvers/zod'
+import { Plus } from 'lucide-react'
+import { memo, useEffect, useMemo, useState } from 'react'
+import { useForm } from 'react-hook-form'
+
 import { Button } from '@components/ui/button'
-import { DialogFooter, DialogHeader } from '@components/ui/dialog'
 import {
-  FormControl,
-  FormField,
-  FormItem,
-  FormLabel,
-  FormMessage,
-} from '@components/ui/form'
-import { Input } from '@components/ui/input'
-import { useToast } from '@components/ui/use-toast'
-import api from '@lib/axios'
+  Dialog,
+  DialogContent,
+  DialogDescription,
+  DialogFooter,
+  DialogHeader,
+  DialogTitle,
+  DialogTrigger,
+} from '@components/ui/dialog'
 import { cn } from '@lib/utils'
 import { findByCEP } from '@services/findByCEP/findByCEP'
 import {
@@ -21,13 +26,17 @@ import {
   normalizePhoneNumber,
   normalizeRG,
 } from '@utils/functions/normalizeInputs'
+
+import api from '@/lib/axios'
 import {
-  Dialog,
-  DialogContent,
-  DialogDescription,
-  DialogTitle,
-  DialogTrigger,
-} from '@radix-ui/react-dialog'
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@components/ui/form'
+import { Input } from '@components/ui/input'
 import {
   Select,
   SelectContent,
@@ -35,24 +44,21 @@ import {
   SelectItem,
   SelectTrigger,
   SelectValue,
-} from '@radix-ui/react-select'
-import { Plus } from 'lucide-react'
+} from '@components/ui/select'
 import { useSession } from 'next-auth/react'
-import { useRouter } from 'next/navigation'
-import { memo, useEffect, useMemo, useState } from 'react'
-import { Form, useForm } from 'react-hook-form'
-import { CreateEmployeeSchema } from '../schema/createEmployeeSchema'
+import { CreateEmployeeSchema } from './schema/createEmployeeSchema'
 import {
   InputsProps,
-  ModalCreateProps,
+  ModalProps,
   RefModalProps,
   RoleOption,
   SelectOptionsProps,
   createEmployeeFormData,
-} from '../types/employeeTypes'
-import { zodResolver } from '@hookform/resolvers/zod'
+} from './types/employeeTypes'
+import { useRouter } from 'next/navigation'
+import { useToast } from '../ui/use-toast'
 
-const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
+const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
   const [open, setOpen] = useState(false)
   const [rolesOptions, setRolesOptions] = useState<SelectOptionsProps>([])
   const { data } = useSession()
@@ -79,8 +85,15 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
   }, [dialogRef])
 
   const onSubmit = (dataForm: createEmployeeFormData) => {
-    const refactorData = {
-      ...dataForm,
+    const data = {
+      name: dataForm.name,
+      birthDate: dataForm.birthDate,
+      rg: dataForm.rg,
+      cpf: dataForm.cpf,
+      maritalStatus: dataForm.maritalStatus,
+      gender: dataForm.gender,
+      hireDate: dataForm.hireDate,
+      email: dataForm.email,
       roleId: Number(dataForm.roleId),
       address: {
         street: dataForm.street,
@@ -94,9 +107,11 @@ const ModalCreateEmployee = ({ dialogRef }: ModalCreateProps) => {
         telephoneNumber: dataForm.telephoneNumber,
       },
     }
+
+    console.log(data)
     const request = async () => {
       await api
-        .post('/employees', refactorData)
+        .post('/employees', data)
         .then(() => {
           toast({
             title: 'Sucesso',

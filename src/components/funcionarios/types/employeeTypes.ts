@@ -2,6 +2,7 @@ import { ColumnDef } from '@tanstack/react-table'
 import { MutableRefObject, ReactNode } from 'react'
 import { z } from 'zod'
 import { CreateEmployeeSchema } from '../schema/createEmployeeSchema'
+import { type } from 'os'
 
 export interface Employee {
   id: string
@@ -10,7 +11,7 @@ export interface Employee {
   status: string
 }
 
-export interface GetEmployee {
+export type GetEmployee = {
   id: number
   name: string
   birthDate: string
@@ -39,12 +40,12 @@ export interface GetEmployee {
 export interface EmployeeProps {
   employees?: Employee[]
 }
-export interface RefModalProps {
+export type RefModalProps = {
   open: (id?: string | number, isActive?: boolean) => void
   close: () => void
 }
 
-export interface DataTableProps<TData, TValue> {
+export type DataTableProps<TData, TValue> = {
   columns: ColumnDef<TData, TValue>[]
   data: TData[]
   refModalCreate?: MutableRefObject<RefModalProps | null>
@@ -53,7 +54,7 @@ export interface DataTableProps<TData, TValue> {
   refModalStatus?: MutableRefObject<RefModalProps | null>
 }
 
-export interface ModalProps {
+export type ModalProps = {
   dialogRef: (ref: RefModalProps) => void | undefined
 }
 
@@ -70,7 +71,7 @@ export type SelectOptionsProps = {
   selectValue: string
 }[]
 
-export interface InputsProps {
+export type InputsProps = {
   labelTitle: string
   required: boolean
   disable?: boolean
@@ -98,4 +99,4 @@ export interface InputsProps {
   isInput: boolean
   inputMax?: number
   selectOptions?: SelectOptionsProps
-}
+}[]

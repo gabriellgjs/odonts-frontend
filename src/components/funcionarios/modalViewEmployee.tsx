@@ -47,7 +47,7 @@ const ModalViewEmployee = ({ dialogRef }: ModalProps) => {
     }
   }, [id])
 
-  const inputsRequire: InputsProps[] = useMemo(
+  const inputsRequire: InputsProps = useMemo(
     () => [
       {
         labelTitle: 'Nome',

@@ -198,7 +198,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
     ]
   }, [])
 
-  const inputsRequire: InputsProps[] = useMemo(() => {
+  const inputsRequire: InputsProps = useMemo(() => {
     return [
       {
         labelTitle: 'Nome',

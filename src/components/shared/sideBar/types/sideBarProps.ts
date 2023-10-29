@@ -1,5 +1,5 @@
 import { ReactNode } from 'react'
 
-export interface SideBarProps {
+export type SideBarProps = {
   children: ReactNode
 }

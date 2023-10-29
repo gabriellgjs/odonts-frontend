@@ -17,6 +17,7 @@ module.exports = {
     },
     extend: {
       backdropBlur: {
+        tiny: '0.063rem',
         sm: '0.125rem',
       },
       fontFamily: {

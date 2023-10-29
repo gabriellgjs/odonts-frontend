@@ -61,21 +61,24 @@ export const SignIn = () => {
           className="mx-8 mt-8 flex flex-col gap-8 sm:mx-0"
           onSubmit={handleSubmit}
         >
-          <Input
-            variant="email"
-            ref={emailInputRef}
-            placeholder="E-mail"
-            type="email"
-          />
+          <div className="flex w-full">
+            <Input
+              variant="email"
+              ref={emailInputRef}
+              placeholder="E-mail"
+              type="email"
+            />
+          </div>
 
-          <Input
-            variant="password"
-            ref={passwordInputRef}
-            placeholder="Senha"
-            type="password"
-            togglePasswordVisibility={handleTogglePasswordVisibility}
-            isPasswordVisible={isPasswordVisible}
-          />
+          <div className="relative">
+            <Input
+              variant="password"
+              ref={passwordInputRef}
+              placeholder="Senha"
+              togglePasswordVisibility={handleTogglePasswordVisibility}
+              isPasswordVisible={isPasswordVisible}
+            />
+          </div>
 
           <Button disabled={isLoading} type="submit">
             entrar

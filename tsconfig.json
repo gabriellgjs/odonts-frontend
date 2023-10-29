@@ -25,6 +25,8 @@
       "@assets/*":["./src/assets/*"],
       "@providers/*":["./src/providers/*"],
       "@lib/*":["./src/lib/*"],
+      "@services/*":["./src/services/*"],
+      "@utils/*":["./src/utils/*"],
     }
   },
   "include": [

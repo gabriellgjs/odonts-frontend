@@ -10,7 +10,6 @@ import {
 } from 'lucide-react'
 import { useSelectedLayoutSegment } from 'next/navigation'
 
-import { SideBarContext } from '@providers/sideBarProvider'
 import { SideBarLink } from '@components/shared/sideBarLink/sideBarLink'
 import { Separator } from '@components/ui/separator'
 import { Sheet, SheetContent, SheetTitle } from '@components/ui/sheet'
@@ -18,6 +17,7 @@ import { memo, useContext } from 'react'
 import { Logo } from '../logo/logo'
 import { SideBarLinkProps } from '../sideBarLink/types/sideBarLink'
 import { SideBarProps } from './types/sideBarProps'
+import { SideBarContext } from '@providers/sideBar/sideBarProvider'
 
 const SideBar = ({ children }: SideBarProps) => {
   const { sideBarActivated, toggleOpenSideBar } = useContext(SideBarContext)
@@ -49,10 +49,10 @@ const SideBar = ({ children }: SideBarProps) => {
       onClick: toggleOpenSideBar,
     },
     {
-      title: 'Funcionário',
-      href: '/funcionario',
+      title: 'Funcionários',
+      href: '/funcionarios',
       icon: <Users />,
-      current: `/${segment}` === '/funcionario',
+      current: `/${segment}` === '/funcionarios',
       variant: 'default',
       onClick: toggleOpenSideBar,
     },

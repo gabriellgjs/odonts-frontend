@@ -6,7 +6,7 @@ const getEmployees = cache(async () => {
   try {
     const employees = await api
       .get('/employees')
-      .then((response): Employee[] => response.data.response)
+      .then((response): Employee[] => response.data)
     return employees
   } catch (error) {
     console.log(error)

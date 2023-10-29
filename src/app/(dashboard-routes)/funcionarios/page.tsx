@@ -1,10 +1,10 @@
-import Employees from '@components/funcionarios/employees'
+import EmployeesPage from '@components/funcionarios/employeesPage'
 import getEmployees from './api/getEmployees'
 
-const EmployeesPage = async () => {
+const Employees = async () => {
   const employees = await getEmployees()
 
-  return <Employees employees={employees} />
+  return <EmployeesPage employees={employees} />
 }
 
-export default EmployeesPage
+export default Employees

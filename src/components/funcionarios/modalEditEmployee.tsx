@@ -1,46 +1,37 @@
 'use client'
 
-import { Plus } from 'lucide-react'
-import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import {
   Dialog,
   DialogContent,
-  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@components/ui/dialog'
-import api from '@/lib/axios'
-import { useRouter } from 'next/navigation'
+import { Pen } from 'lucide-react'
+import { memo, useCallback, useRef, useState } from 'react'
+
 import { StyledDiv } from '../ui/styledDiv'
-import { useToast } from '../ui/use-toast'
 import FormEmployee from './formEmployee'
 import {
   ModalProps,
   RefFormProps,
-  RefModalProps,
   createEmployeeFormData,
 } from './types/employeeTypes'
+import { useRouter } from 'next/navigation'
+import { useToast } from '../ui/use-toast'
+import api from '@/lib/axios'
 
-const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
+const ModalEditEmployee = ({ row }: ModalProps) => {
   const [open, setOpen] = useState(false)
+  const refFormView = useRef<RefFormProps | null>(null)
   const router = useRouter()
   const { toast } = useToast()
-  const refFormCreate = useRef<RefFormProps | null>(null)
-
-  useEffect(() => {
-    if (dialogRef) {
-      const ref: RefModalProps = {
-        open: () => setOpen(true),
-        close: () => setOpen(false),
-      }
-      dialogRef(ref)
-    }
-  }, [dialogRef])
 
   const onSubmit = useCallback(
     (dataForm: createEmployeeFormData) => {
+      console.log(dataForm)
       const data = {
+        id: row?.id,
         name: dataForm.name,
         birthDate: dataForm.birthDate,
         rg: dataForm.rg,
@@ -48,9 +39,16 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
         maritalStatus: dataForm.maritalStatus,
         gender: dataForm.gender,
         hireDate: dataForm.hireDate,
-        email: dataForm.email,
-        roleId: Number(dataForm.roleId),
+        user: {
+          id: row?.user.id,
+          email: dataForm.email,
+          roleId:
+            dataForm.roleId === row?.user.role.description
+              ? row.user.roleId
+              : dataForm.roleId,
+        },
         address: {
+          id: row?.address.id,
           street: dataForm.street,
           number: dataForm.number,
           district: dataForm.district,
@@ -59,17 +57,18 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
           state: dataForm.state,
         },
         telephone: {
+          id: row?.telephone.id,
           telephoneNumber: dataForm.telephoneNumber,
         },
       }
 
       const request = async () => {
         await api
-          .post('/employees', data)
+          .put(`/employees/${row?.id}`, data)
           .then(() => {
             toast({
               title: 'Sucesso',
-              description: 'Funcionário criado com sucesso',
+              description: 'Funcionário atualizado com sucesso',
             })
             setOpen(false)
           })
@@ -78,7 +77,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
             toast({
               title: 'Atenção',
               variant: 'destructive',
-              description: 'Error ao criar funcionário',
+              description: 'Error ao atualizar funcionário',
             })
           })
           .finally(() => {
@@ -88,7 +87,16 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
 
       request()
     },
-    [router, toast],
+    [
+      router,
+      row?.address.id,
+      row?.id,
+      row?.telephone.id,
+      row?.user.id,
+      row?.user.role.description,
+      row?.user.roleId,
+      toast,
+    ],
   )
 
   return (
@@ -96,24 +104,24 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
       open={open}
       onOpenChange={(isOpen) => {
         setOpen(isOpen)
-        if (isOpen) refFormCreate.current?.reset()
+        if (isOpen) refFormView.current?.reset()
       }}
     >
       <DialogTrigger asChild>
         <div>
-          <StyledDiv icon={<Plus />}>Criar Funcionário</StyledDiv>
+          <StyledDiv icon={<Pen />} />
         </div>
       </DialogTrigger>
 
       <DialogContent className="sm:min-w-fit">
         <DialogHeader className="mt-20 sm:mt-0">
-          <DialogTitle>Criar novo funcionário</DialogTitle>
-          <DialogDescription>Crie um novo funcionário</DialogDescription>
+          <DialogTitle>Editar funcionário</DialogTitle>
         </DialogHeader>
         <FormEmployee
           disabledInputs={false}
+          row={row}
           formRef={(ref) => {
-            refFormCreate.current = ref
+            refFormView.current = ref
           }}
           onSubmit={onSubmit}
         />
@@ -122,4 +130,4 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
   )
 }
 
-export default memo(ModalCreateEmployee)
+export default memo(ModalEditEmployee)

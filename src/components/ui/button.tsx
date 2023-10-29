@@ -11,19 +11,19 @@ import { cn } from '@/lib/utils'
 import { LucideProps } from 'lucide-react'
 
 const buttonVariants = cva(
-  'justify-center flex items-center rounded-lg capitalize',
+  'justify-center flex items-center rounded-lg capitalize gap-3 p-2',
   {
     variants: {
       variant: {
         default:
           'bg-orange-500 text-white hover:bg-orange-600 text-lg font-bold',
         outline:
-          ' border sm:hover:border-gray-200 sm:text-gray-800 sm:bg-transparent hover:bg-opacity-60 hover:bg-stone-200 text-base font-medium',
+          'border sm:hover:border-gray-200 sm:text-gray-800 sm:bg-transparent hover:bg-opacity-60 hover:bg-stone-200 text-base font-medium',
         confirm: 'font-medium bg-green-300 hover:bg-green-500 text-zinc-900',
       },
       size: {
-        default: 'gap-3 p-2 sm:p-3',
-        sm: 'w-full my-4 gap-3 p-2 sm:p-3',
+        default: '',
+        sm: 'my-4 sm:p-3',
       },
     },
     defaultVariants: {

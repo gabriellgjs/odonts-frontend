@@ -1,3 +1,4 @@
+import api from '@/lib/axios'
 import {
   AlertDialog,
   AlertDialogAction,
@@ -7,43 +8,30 @@ import {
   AlertDialogFooter,
   AlertDialogHeader,
   AlertDialogTitle,
-} from '@/components/ui/alert-dialog'
-import api from '@/lib/axios'
+  AlertDialogTrigger,
+} from '@components/ui/alert-dialog'
+import { UserCheck2, UserX2 } from 'lucide-react'
 import { useRouter } from 'next/navigation'
-import { useEffect, useState } from 'react'
+import { useState } from 'react'
+import { StyledDiv } from '../ui/styledDiv'
 import { useToast } from '../ui/use-toast'
-import { ModalProps, RefModalProps } from './types/employeeTypes'
+import { ModalProps } from './types/employeeTypes'
 
-const StatusEmployeeButton = ({ dialogRef }: ModalProps) => {
+const StatusEmployeeButton = ({ row }: ModalProps) => {
   const [open, setOpen] = useState(false)
-  const [id, setId] = useState<string | undefined | number>()
-  const [isActive, setIsActive] = useState<boolean>()
   const { toast } = useToast()
   const router = useRouter()
-
-  useEffect(() => {
-    if (dialogRef) {
-      const ref: RefModalProps = {
-        open: (id, isEmployeeActive) => {
-          setId(id)
-          setOpen(true)
-          setIsActive(isEmployeeActive)
-        },
-        close: () => setOpen(false),
-      }
-      dialogRef(ref)
-    }
-  }, [dialogRef])
+  const status = row ? row.user.status : ''
 
   const statusEmployee = () => {
     const employee = async () => {
       await api
-        .patch(`/employees/${id}`)
+        .patch(`/employees/${row ? row.id : 0}`)
         .then(() => {
           toast({
             title: `Sucesso`,
             description: `Funcionário ${
-              isActive ? 'inativado' : 'ativado'
+              status === 'ativo' ? 'inativado' : 'ativado'
             } com sucesso`,
           })
           setOpen(false)
@@ -54,7 +42,7 @@ const StatusEmployeeButton = ({ dialogRef }: ModalProps) => {
             title: 'Atenção',
             variant: 'destructive',
             description: `Error ao ${
-              isActive ? 'inativar' : 'ativar'
+              status === 'ativo' ? 'inativar' : 'ativar'
             } o funcionário`,
           })
         })
@@ -62,9 +50,8 @@ const StatusEmployeeButton = ({ dialogRef }: ModalProps) => {
           router.refresh()
         })
     }
-    if (id) {
-      employee()
-    }
+
+    employee()
   }
 
   return (
@@ -72,16 +59,21 @@ const StatusEmployeeButton = ({ dialogRef }: ModalProps) => {
       open={open}
       onOpenChange={(isOpen) => {
         setOpen(isOpen)
-        if (isOpen) console.log(isOpen)
       }}
     >
+      <AlertDialogTrigger>
+        <>
+          <StyledDiv icon={status === 'ativo' ? <UserX2 /> : <UserCheck2 />} />
+        </>
+      </AlertDialogTrigger>
       <AlertDialogContent>
         <AlertDialogHeader>
           <AlertDialogTitle>
-            Você deseja {isActive ? 'inativar' : 'ativar'} este funcionário?
+            Você deseja {status === 'ativo' ? 'inativar' : 'ativar'} este
+            funcionário?
           </AlertDialogTitle>
           <AlertDialogDescription>
-            {isActive ? (
+            {status === 'ativo' ? (
               <span>
                 As informações desse usuário
                 <strong> não serão perdidas ou removidas. </strong>

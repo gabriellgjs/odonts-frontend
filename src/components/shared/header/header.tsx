@@ -1,7 +1,7 @@
 import { AlignJustify } from 'lucide-react'
 import { Logo } from '../logo/logo'
 import { useContext } from 'react'
-import { SideBarContext } from '@providers/sideBarProvider'
+import { SideBarContext } from '@providers/sideBar/sideBarProvider'
 
 export const Header = () => {
   const { toggleOpenSideBar } = useContext(SideBarContext)

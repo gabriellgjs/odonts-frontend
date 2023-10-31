@@ -29,7 +29,6 @@ const ModalEditEmployee = ({ row }: ModalProps) => {
 
   const onSubmit = useCallback(
     (dataForm: createEmployeeFormData) => {
-      console.log(dataForm)
       const data = {
         id: row?.id,
         name: dataForm.name,

@@ -1,104 +1,110 @@
 'use client'
 
 import {
+  AlignJustify,
   CalendarHeart,
   DoorOpen,
   Home,
   PersonStanding,
   Users,
-  X,
 } from 'lucide-react'
 import { useSelectedLayoutSegment } from 'next/navigation'
 
+import { StyledDiv } from '@components/ui/styledDiv'
 import { SideBarLink } from '@components/shared/sideBarLink/sideBarLink'
 import { Separator } from '@components/ui/separator'
-import { Sheet, SheetContent, SheetTitle } from '@components/ui/sheet'
-import { memo, useContext } from 'react'
+import {
+  Sheet,
+  SheetContent,
+  SheetTitle,
+  SheetTrigger,
+} from '@components/ui/sheet'
+import { memo, useCallback, useState, useMemo } from 'react'
 import { Logo } from '../logo/logo'
-import { SideBarLinkProps } from '../sideBarLink/types/sideBarLink'
-import { SideBarProps } from './types/sideBarProps'
-import { SideBarContext } from '@providers/sideBar/sideBarProvider'
+import { SideBarLinkProps } from '../sideBarLink/types/sideBarLinkProps'
 
-const SideBar = ({ children }: SideBarProps) => {
-  const { sideBarActivated, toggleOpenSideBar } = useContext(SideBarContext)
+const SideBar = () => {
   const segment = useSelectedLayoutSegment()
+  const [open, setOpen] = useState(false)
 
-  const sideBarOptions: SideBarLinkProps[] = [
-    {
-      title: 'Dashboard',
-      href: '/',
-      icon: <Home />,
-      current: segment === '(dashboard)',
-      variant: 'default',
-      onClick: toggleOpenSideBar,
-    },
-    {
-      title: 'Agendamento',
-      href: '/agendamento',
-      icon: <CalendarHeart />,
-      current: `/${segment}` === '/agendamento',
-      variant: 'default',
-      onClick: toggleOpenSideBar,
-    },
-    {
-      title: 'Paciente',
-      href: '/paciente',
-      icon: <PersonStanding />,
-      current: `/${segment}` === '/paciente',
-      variant: 'default',
-      onClick: toggleOpenSideBar,
-    },
-    {
-      title: 'Funcionários',
-      href: '/funcionarios',
-      icon: <Users />,
-      current: `/${segment}` === '/funcionarios',
-      variant: 'default',
-      onClick: toggleOpenSideBar,
-    },
-    {
-      title: 'Sair',
-      href: '',
-      icon: <DoorOpen />,
-      current: false,
-      variant: 'logout',
-      onClick: toggleOpenSideBar,
-    },
-  ]
+  const handleSetSideBar = useCallback(() => setOpen((prev) => !prev), [])
+
+  const sideBarOptions: SideBarLinkProps[] = useMemo(
+    () => [
+      {
+        title: 'Dashboard',
+        href: '/',
+        icon: <Home />,
+        current: segment === '(dashboard)',
+        variant: 'default',
+        handleSideBar: handleSetSideBar,
+      },
+      {
+        title: 'Agendamento',
+        href: '/agendamento',
+        icon: <CalendarHeart />,
+        current: `/${segment}` === '/agendamento',
+        variant: 'default',
+        handleSideBar: handleSetSideBar,
+      },
+      {
+        title: 'Paciente',
+        href: '/paciente',
+        icon: <PersonStanding />,
+        current: `/${segment}` === '/paciente',
+        variant: 'default',
+        handleSideBar: handleSetSideBar,
+      },
+      {
+        title: 'Funcionários',
+        href: '/funcionarios',
+        icon: <Users />,
+        current: `/${segment}` === '/funcionarios',
+        variant: 'default',
+        handleSideBar: handleSetSideBar,
+      },
+      {
+        title: 'Sair',
+        href: '',
+        icon: <DoorOpen />,
+        current: false,
+        variant: 'logout',
+        handleSideBar: handleSetSideBar,
+      },
+    ],
+    [handleSetSideBar, segment],
+  )
 
   return (
-    <>
-      <div className="grid grid-cols-2 gap-2 ">
-        <Sheet open={sideBarActivated}>
-          <SheetContent side="left" closeSheet={toggleOpenSideBar}>
-            <div className="flex h-screen flex-col">
-              <SheetTitle className="flex flex-row items-center justify-between">
-                <Logo width={40} height={40} />
-                <div
-                  className="cursor-pointer p-1 hover:rounded-lg hover:bg-gray-400"
-                  onClick={toggleOpenSideBar}
-                >
-                  <X />
-                </div>
-              </SheetTitle>
-              <Separator className="my-4" />
-              {sideBarOptions.map((option) => (
-                <SideBarLink
-                  onClick={option.onClick}
-                  key={option.title}
-                  href={option.href}
-                  title={option.title}
-                  isActive={option.current}
-                  icon={option.icon}
-                  variant={option.variant}
-                />
-              ))}
-            </div>
-          </SheetContent>
-        </Sheet>
-      </div>
-      {children}
-    </>
+    <Sheet open={open}>
+      <SheetTrigger>
+        <div onClick={handleSetSideBar}>
+          <StyledDiv
+            className="hover:border"
+            icon={<AlignJustify className="m-0 p-0" />}
+          />
+        </div>
+      </SheetTrigger>
+      <SheetContent side="left" closeSheet={handleSetSideBar}>
+        <div className="flex h-screen flex-col">
+          <SheetTitle className="flex flex-row items-center justify-center">
+            <Logo width={50} height={50} />
+          </SheetTitle>
+          <Separator className="my-4" />
+          {sideBarOptions.map((option) => (
+            <SideBarLink
+              key={option.title}
+              handleSideBar={handleSetSideBar}
+              href={option.href}
+              title={option.title}
+              isActive={option.current}
+              icon={option.icon}
+              variant={option.variant}
+            />
+          ))}
+        </div>
+      </SheetContent>
+    </Sheet>
   )
 }
 

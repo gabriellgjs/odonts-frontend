@@ -88,7 +88,6 @@ const FormEmployee = ({
     return ''
   }
 
-  console.log(form.formState.errors.email)
   const cpfValueWatch = form.watch('cpf')
   const rgValueWatch = form.watch('rg')
   const phoneValueWatch = form.watch('telephoneNumber')

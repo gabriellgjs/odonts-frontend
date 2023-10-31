@@ -1,8 +1,7 @@
-import { Avatar, AvatarFallback } from '@components/ui/avatar'
+import { GenerateInitialNameForAvatar } from '@utils/functions/generateInitialName'
+import { useSession } from 'next-auth/react'
 import { ReactNode } from 'react'
 import SideBar from '../sideBar/sideBar'
-import { useSession } from 'next-auth/react'
-import { GenerateInitialNameForAvatar } from '@/utils/functions/generateInitialName'
 import AvatarProfile from './avatarProfile'
 
 export const Header = ({ children }: { children: ReactNode }) => {

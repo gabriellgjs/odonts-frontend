@@ -1,5 +1,9 @@
 import { SignIn } from '@components/authRoutes/signIn'
+import { signOut } from './singOut'
 
-const SigInLogin = () => <SignIn />
+const SigInLogin = () => {
+  signOut()
+  return <SignIn />
+}
 
 export default SigInLogin

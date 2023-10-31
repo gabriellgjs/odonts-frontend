@@ -1,6 +1,7 @@
 import api from '@/lib/axios'
 import { NextAuthOptions } from 'next-auth'
 import CredentialsProvider from 'next-auth/providers/credentials'
+import { cookies } from 'next/headers'
 
 const nextAuthOptions: NextAuthOptions = {
   providers: [
@@ -36,7 +37,8 @@ const nextAuthOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
-      session = token as any
+      session = token as never
+      cookies().set('access-token', session.user.token ?? '')
       return session
     },
   },

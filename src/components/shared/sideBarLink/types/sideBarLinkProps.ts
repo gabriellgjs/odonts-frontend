@@ -11,5 +11,5 @@ export interface SideBarLinkProps
   href: string
   isActive?: boolean
   current?: boolean
-  onClick: () => void
+  handleSideBar: () => void
 }

@@ -1,10 +1,10 @@
 import { GenerateInitialNameForAvatar } from '@utils/functions/generateInitialName'
 import { useSession } from 'next-auth/react'
-import { ReactNode } from 'react'
+import { ReactNode, memo } from 'react'
 import SideBar from '../sideBar/sideBar'
 import AvatarProfile from './avatarProfile'
 
-export const Header = ({ children }: { children: ReactNode }) => {
+const Header = ({ children }: { children: ReactNode }) => {
   const { data } = useSession()
   const name = GenerateInitialNameForAvatar(data?.user.name)
   return (
@@ -17,3 +17,5 @@ export const Header = ({ children }: { children: ReactNode }) => {
     </>
   )
 }
+
+export default Header

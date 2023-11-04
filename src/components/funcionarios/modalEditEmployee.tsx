@@ -13,9 +13,9 @@ import { memo, useCallback, useRef, useState } from 'react'
 import { StyledDiv } from '../ui/styledDiv'
 import FormEmployee from './formEmployee'
 import {
+  createEmployeeFormData,
   ModalProps,
   RefFormProps,
-  createEmployeeFormData,
 } from './types/employeeTypes'
 import { useRouter } from 'next/navigation'
 import { useToast } from '../ui/use-toast'
@@ -108,7 +108,7 @@ const ModalEditEmployee = ({ row }: ModalProps) => {
     >
       <DialogTrigger asChild>
         <div>
-          <StyledDiv icon={<Pen />} />
+          <StyledDiv className={'hover:bg-gray-100'} icon={<Pen />} />
         </div>
       </DialogTrigger>
 

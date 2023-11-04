@@ -22,7 +22,7 @@ export const metadata = {
 const RootLayout = ({ children }: { children: ReactNode }) => (
   <html lang="pt-BR">
     <body
-      className={`${roboto.variable} bg-neutral-50 font-sans dark:bg-gray-900`}
+      className={`${roboto.variable} bg-neutral-50 font-sans dark:bg-neutral-900`}
       suppressHydrationWarning={true}
     >
       <NextAuthProviderSession>

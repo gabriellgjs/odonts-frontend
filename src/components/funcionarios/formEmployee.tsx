@@ -106,11 +106,10 @@ const FormEmployee = ({
         .then((response): RoleOption[] => response.data.results)
 
       const roleOptions: SelectOptionProps = response.map((role) => {
-        const values = {
+        return {
           value: role.id,
           selectValue: role.description,
         }
-        return values
       })
 
       setRolesOptions(roleOptions)

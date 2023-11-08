@@ -21,7 +21,6 @@ export const metadata = {
 
 const RootLayout = ({ children }: { children: ReactNode }) => (
   <html lang="pt-BR" suppressHydrationWarning>
-    <head></head>
     <body
       className={`${roboto.variable} bg-neutral-50 font-sans dark:bg-stone-900`}
     >

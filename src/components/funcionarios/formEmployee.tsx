@@ -121,7 +121,7 @@ const FormEmployee = ({
   }, [data?.user.token])
 
   const genderOptions = useMemo(() => {
-    const defaultGenders = [
+    return [
       {
         value: 'Masculino',
         selectValue: 'Masculino',
@@ -131,8 +131,6 @@ const FormEmployee = ({
         selectValue: 'Feminino',
       },
     ]
-
-    return defaultGenders
   }, [])
 
   const maritalStatusOptions = useMemo(() => {

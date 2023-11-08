@@ -3,7 +3,7 @@ import { ReactNode } from 'react'
 import './globals.css'
 import { Roboto } from 'next/font/google'
 import NextAuthProviderSession from '@providers/session/sessionProviders'
-import ThemeProvider from '@providers/theme/themeProviders'
+import { ThemeProvider } from '@providers/theme/themeProviders'
 
 const roboto = Roboto({
   subsets: ['latin'],
@@ -20,21 +20,14 @@ export const metadata = {
 }
 
 const RootLayout = ({ children }: { children: ReactNode }) => (
-  <html lang="pt-BR">
+  <html lang="pt-BR" suppressHydrationWarning>
+    <head></head>
     <body
-      className={`${roboto.variable} bg-neutral-50 font-sans dark:bg-neutral-900`}
-      suppressHydrationWarning={true}
+      className={`${roboto.variable} bg-neutral-50 font-sans dark:bg-stone-900`}
     >
-      <NextAuthProviderSession>
-        <ThemeProvider
-          attribute="class"
-          defaultTheme="system"
-          enableSystem
-          disableTransitionOnChange
-        >
-          {children}
-        </ThemeProvider>
-      </NextAuthProviderSession>
+      <ThemeProvider attribute="class" defaultTheme="system" enableSystem>
+        <NextAuthProviderSession>{children}</NextAuthProviderSession>
+      </ThemeProvider>
     </body>
   </html>
 )

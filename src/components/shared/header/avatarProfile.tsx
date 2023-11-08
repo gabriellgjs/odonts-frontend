@@ -26,13 +26,13 @@ const AvatarProfile = ({ name }: AvatarProfileProps) => {
         <DropdownMenuItem
           className="text-gray-800 hover:bg-neutral-200 dark:text-neutral-100 dark:hover:bg-gray-800"
           onClick={() => {
-            router.push('/perfil')
+            router.push('/configuracoes/perfil')
           }}
         >
           Meu perfil
         </DropdownMenuItem>
         <DropdownMenuItem
-          className="text-red-400 hover:text-red-500"
+          className="text-red-400 hover:text-red-500 dark:text-red-500 dark:hover:text-red-600"
           onClick={async () => {
             await signOut({ redirect: false })
             router.push('/login')

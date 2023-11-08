@@ -11,7 +11,7 @@ type StyledDivProps = {
 }
 
 export const StyledDiv = ({ children, className, icon }: StyledDivProps) => {
-  const { systemTheme } = useTheme()
+  const { resolvedTheme } = useTheme()
 
   return (
     <div
@@ -24,7 +24,7 @@ export const StyledDiv = ({ children, className, icon }: StyledDivProps) => {
         cloneElement(icon, {
           width: 20,
           height: 20,
-          color: systemTheme !== 'dark' ? colors.gray[700] : colors.gray[100],
+          color: resolvedTheme === 'dark' ? colors.gray[100] : colors.gray[900],
         })}
       {children}
     </div>

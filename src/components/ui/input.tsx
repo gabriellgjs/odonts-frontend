@@ -1,19 +1,20 @@
 import { cva, type VariantProps } from 'class-variance-authority'
-import { DetailedHTMLProps, InputHTMLAttributes, forwardRef } from 'react'
+import { DetailedHTMLProps, forwardRef, InputHTMLAttributes } from 'react'
 import { Eye, EyeOff } from 'lucide-react'
 import colors from 'tailwindcss/colors'
 
 import { cn } from '@lib/utils'
+import { useTheme } from 'next-themes'
 
 const inputVariants = cva(
-  'rounded-lg border-2 border-gray-100 text-base text-gray-900 focus:border-orange-500 focus:outline-none placeholder:text-slate-500 disabled:cursor-not-allowed',
+  'rounded-lg border-2 bg-neutral-100 dark:bg-transparent dark:border-gray-400 border-gray-100 text-base dark:text-neutral-50 text-gray-900 dark:focus:border-blue-500 focus:border-orange-500  focus:outline-none dark:placeholder:text-gray-100 placeholder:text-gray-700 disabled:cursor-not-allowed dark:disabled:opacity-100',
 
   {
     variants: {
       variant: {
         email: ['flex-1'],
         password: ['flex-1', 'w-full'],
-        boxFinder: ['w-96', 'focus:border-gray-400'],
+        boxFinder: ['w-96', ''],
       },
       inputSize: {
         default: 'p-4',
@@ -52,6 +53,7 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
     },
     ref,
   ) => {
+    const { systemTheme } = useTheme()
     return (
       <>
         <input
@@ -74,9 +76,19 @@ export const Input = forwardRef<HTMLInputElement, InputProps>(
             type="button"
           >
             {isPasswordVisible ? (
-              <Eye className="h-5 w-5" color={colors.gray[700]} />
+              <Eye
+                className="fill h-5 w-5"
+                color={
+                  systemTheme !== 'dark' ? colors.gray[700] : colors.gray[100]
+                }
+              />
             ) : (
-              <EyeOff className="h-5 w-5" color={colors.gray[500]} />
+              <EyeOff
+                className="h-5 w-5"
+                color={
+                  systemTheme !== 'dark' ? colors.gray[700] : colors.gray[100]
+                }
+              />
             )}
           </button>
         )}

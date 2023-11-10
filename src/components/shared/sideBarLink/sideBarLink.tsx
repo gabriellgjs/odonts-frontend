@@ -1,49 +1,18 @@
-import { cn } from '@lib/utils'
-import { cva } from 'class-variance-authority'
 import { useRouter } from 'next/navigation'
-import { cloneElement, forwardRef, memo, useCallback } from 'react'
-import colors from 'tailwindcss/colors'
+import { forwardRef, memo, useCallback } from 'react'
 import { SideBarLinkProps } from './types/sideBarLinkProps'
-import { signOut } from 'next-auth/react'
-
-export const sideBarLinkVariants = cva('my-3 flex  cursor-pointer', {
-  variants: {
-    variant: {
-      default: 'rounded-lg items-center',
-      logout: 'flex-1 items-end ',
-    },
-    size: {
-      default: 'py-2',
-      logout: 'py-4',
-    },
-  },
-  defaultVariants: {
-    variant: 'default',
-    size: 'default',
-  },
-})
 
 export const SideBarLink = memo(
   forwardRef<HTMLLIElement, SideBarLinkProps>(
-    (
-      { href, icon, title, isActive, variant, size, handleSideBar, className },
-      ref,
-    ) => {
+    ({ href, title, isActive, handleSideBar }, ref) => {
       const router = useRouter()
 
       const toggleRedirectPage = useCallback(
         async (href: string) => {
-          if (variant === 'default') {
-            router.push(href)
-            handleSideBar()
-            return
-          }
-
-          await signOut({ redirect: false })
-
-          router.push('/login')
+          router.push(href)
+          handleSideBar()
         },
-        [handleSideBar, router, variant],
+        [handleSideBar, router],
       )
 
       return (
@@ -52,45 +21,14 @@ export const SideBarLink = memo(
           onClick={() => {
             toggleRedirectPage(href)
           }}
-          className={cn(
-            sideBarLinkVariants({ variant, size, className }),
-            variant === 'default'
-              ? `${
-                  !isActive
-                    ? 'hover:bg-gray-200'
-                    : 'bg-gray-500 hover:bg-gray-600'
-                }`
-              : '',
-          )}
+          className={` my-3 flex cursor-pointer items-center rounded-lg py-2 pl-4 ${
+            isActive
+              ? 'bg-neutral-200/80 dark:bg-gray-900'
+              : 'hover:bg-neutral-200 dark:hover:bg-gray-900'
+          }`}
         >
-          <div
-            className={cn(
-              'flex  items-center rounded-lg',
-              variant === 'logout'
-                ? 'my-2 w-fit bg-transparent hover:bg-zinc-100'
-                : 'w-full',
-            )}
-          >
-            <div className="rounded-2xl p-2">
-              {cloneElement(icon, {
-                color:
-                  variant === 'default'
-                    ? `${!isActive ? colors.gray[700] : colors.orange[500]}`
-                    : colors.gray[500],
-                width: 20,
-                height: 20,
-              })}
-            </div>
-            <span
-              className={cn(
-                'ml-4 text-sm capitalize',
-                variant === 'default'
-                  ? `${isActive ? 'font-bold text-neutral-50' : 'font-medium'}`
-                  : ' font-medium text-red-500 hover:text-red-600',
-              )}
-            >
-              {title}
-            </span>
+          <div className={'flex items-center rounded-lg'}>
+            <span className={'text-lg font-medium'}>{title}</span>
           </div>
         </li>
       )

@@ -35,12 +35,12 @@ import { DialogFooter } from '../ui/dialog'
 import { Input } from '../ui/input'
 import { CreateEmployeeSchema } from './schema/createEmployeeSchema'
 import {
+  createEmployeeFormData,
   Employee,
   InputsProps,
   RefFormProps,
   RoleOption,
   SelectOptionProps,
-  createEmployeeFormData,
 } from './types/employeeTypes'
 
 type FormEmployeeProps = {
@@ -106,11 +106,10 @@ const FormEmployee = ({
         .then((response): RoleOption[] => response.data.results)
 
       const roleOptions: SelectOptionProps = response.map((role) => {
-        const values = {
+        return {
           value: role.id,
           selectValue: role.description,
         }
-        return values
       })
 
       setRolesOptions(roleOptions)
@@ -121,7 +120,7 @@ const FormEmployee = ({
   }, [data?.user.token])
 
   const genderOptions = useMemo(() => {
-    const defaultGenders = [
+    return [
       {
         value: 'Masculino',
         selectValue: 'Masculino',
@@ -131,8 +130,6 @@ const FormEmployee = ({
         selectValue: 'Feminino',
       },
     ]
-
-    return defaultGenders
   }, [])
 
   const maritalStatusOptions = useMemo(() => {
@@ -477,13 +474,14 @@ const FormEmployee = ({
                             disabled={input.disable}
                             value={field.value}
                             className={cn(
+                              'dark:border-gray-400 dark:bg-transparent dark:focus:border-blue-500',
                               input.errorWatcher
                                 ? 'border-red-400 focus:border-red-400'
                                 : '',
                             )}
                           >
                             <SelectValue
-                              className="w-full text-slate-500"
+                              className="w-full text-slate-500 "
                               placeholder={
                                 row
                                   ? handlerSelectedOption(input.inputName)
@@ -493,13 +491,16 @@ const FormEmployee = ({
                           </SelectTrigger>
                         </FormControl>
                         <FormMessage />
-                        <SelectContent className="w-full">
+                        <SelectContent className="w-full dark:bg-gray-700">
                           <SelectGroup>
                             {input.selectOptions &&
                               input.selectOptions
                                 .filter((option) => option)
                                 .map((option, index) => (
                                   <SelectItem
+                                    className={
+                                      'hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-800'
+                                    }
                                     key={index}
                                     value={String(option.value)}
                                   >

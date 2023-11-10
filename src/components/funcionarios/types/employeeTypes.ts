@@ -3,7 +3,7 @@ import { z } from 'zod'
 import { CreateEmployeeSchema } from '../schema/createEmployeeSchema'
 
 export type Employee = {
-  id?: number
+  id: number
   name: string
   birthDate: string
   cpf: string
@@ -13,7 +13,7 @@ export type Employee = {
   maritalStatus: string
   rg: string
   user: {
-    id?: number
+    id: number
     status: string
     email: string
     password?: string
@@ -23,11 +23,11 @@ export type Employee = {
     }
   }
   telephone: {
-    id?: number
+    id: number
     telephoneNumber: string
   }
   address: {
-    id?: number
+    id: number
     city: string
     district: string
     number: string

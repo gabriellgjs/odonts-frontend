@@ -1,16 +1,7 @@
 'use client'
 
-import {
-  AlignJustify,
-  CalendarHeart,
-  DoorOpen,
-  Home,
-  PersonStanding,
-  Users,
-} from 'lucide-react'
+import { AlignJustify } from 'lucide-react'
 import { useSelectedLayoutSegment } from 'next/navigation'
-
-import { StyledDiv } from '@components/ui/styledDiv'
 import { SideBarLink } from '@components/shared/sideBarLink/sideBarLink'
 import { Separator } from '@components/ui/separator'
 import {
@@ -19,7 +10,8 @@ import {
   SheetTitle,
   SheetTrigger,
 } from '@components/ui/sheet'
-import { memo, useCallback, useState, useMemo } from 'react'
+import { StyledDiv } from '@components/ui/styledDiv'
+import { memo, useCallback, useMemo, useState } from 'react'
 import { Logo } from '../logo/logo'
 import { SideBarLinkProps } from '../sideBarLink/types/sideBarLinkProps'
 
@@ -34,41 +26,25 @@ const SideBar = () => {
       {
         title: 'Dashboard',
         href: '/',
-        icon: <Home />,
         current: segment === '(dashboard)',
-        variant: 'default',
         handleSideBar: handleSetSideBar,
       },
       {
-        title: 'Agendamento',
-        href: '/agendamento',
-        icon: <CalendarHeart />,
-        current: `/${segment}` === '/agendamento',
-        variant: 'default',
+        title: 'Agendamentos',
+        href: '/agendamentos',
+        current: `/${segment}` === '/agendamentos',
         handleSideBar: handleSetSideBar,
       },
       {
-        title: 'Paciente',
-        href: '/paciente',
-        icon: <PersonStanding />,
-        current: `/${segment}` === '/paciente',
-        variant: 'default',
+        title: 'Pacientes',
+        href: '/pacientes',
+        current: `/${segment}` === '/pacientes',
         handleSideBar: handleSetSideBar,
       },
       {
         title: 'Funcionários',
         href: '/funcionarios',
-        icon: <Users />,
         current: `/${segment}` === '/funcionarios',
-        variant: 'default',
-        handleSideBar: handleSetSideBar,
-      },
-      {
-        title: 'Sair',
-        href: '',
-        icon: <DoorOpen />,
-        current: false,
-        variant: 'logout',
         handleSideBar: handleSetSideBar,
       },
     ],
@@ -79,10 +55,7 @@ const SideBar = () => {
     <Sheet open={open}>
       <SheetTrigger>
         <div onClick={handleSetSideBar}>
-          <StyledDiv
-            className="hover:border"
-            icon={<AlignJustify className="m-0 p-0" />}
-          />
+          <StyledDiv icon={<AlignJustify className="m-0 p-0" />} />
         </div>
       </SheetTrigger>
       <SheetContent side="left" closeSheet={handleSetSideBar}>
@@ -98,8 +71,6 @@ const SideBar = () => {
               href={option.href}
               title={option.title}
               isActive={option.current}
-              icon={option.icon}
-              variant={option.variant}
             />
           ))}
         </div>

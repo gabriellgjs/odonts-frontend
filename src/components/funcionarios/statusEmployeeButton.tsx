@@ -63,7 +63,10 @@ const StatusEmployeeButton = ({ row }: ModalProps) => {
     >
       <AlertDialogTrigger>
         <>
-          <StyledDiv icon={status === 'ativo' ? <UserX2 /> : <UserCheck2 />} />
+          <StyledDiv
+            className={'hover:bg-gray-100'}
+            icon={status === 'ativo' ? <UserX2 /> : <UserCheck2 />}
+          />
         </>
       </AlertDialogTrigger>
       <AlertDialogContent>
@@ -72,7 +75,7 @@ const StatusEmployeeButton = ({ row }: ModalProps) => {
             Você deseja {status === 'ativo' ? 'inativar' : 'ativar'} este
             funcionário?
           </AlertDialogTitle>
-          <AlertDialogDescription>
+          <AlertDialogDescription className={'dark:text-gray-100'}>
             {status === 'ativo' ? (
               <span>
                 As informações desse usuário

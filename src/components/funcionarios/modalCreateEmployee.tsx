@@ -16,10 +16,10 @@ import { StyledDiv } from '../ui/styledDiv'
 import { useToast } from '../ui/use-toast'
 import FormEmployee from './formEmployee'
 import {
+  createEmployeeFormData,
   ModalProps,
   RefFormProps,
   RefModalProps,
-  createEmployeeFormData,
 } from './types/employeeTypes'
 
 const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
@@ -101,7 +101,14 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
     >
       <DialogTrigger asChild>
         <div>
-          <StyledDiv icon={<Plus />}>Criar Funcionário</StyledDiv>
+          <StyledDiv
+            className="cursor-pointer bg-gray-100 transition-colors hover:bg-gray-200 dark:bg-gray-800 "
+            icon={<Plus />}
+          >
+            <span className="text-gray-700 dark:text-neutral-100">
+              Criar Funcionário
+            </span>
+          </StyledDiv>
         </div>
       </DialogTrigger>
 

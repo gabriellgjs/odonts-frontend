@@ -1,12 +1,6 @@
-import { VariantProps } from 'class-variance-authority'
-import { LucideProps } from 'lucide-react'
-import { LiHTMLAttributes, ReactElement } from 'react'
-import { sideBarLinkVariants } from '../sideBarLink'
+import { LiHTMLAttributes } from 'react'
 
-export interface SideBarLinkProps
-  extends LiHTMLAttributes<HTMLLIElement>,
-    VariantProps<typeof sideBarLinkVariants> {
-  icon: ReactElement<LucideProps>
+export interface SideBarLinkProps extends LiHTMLAttributes<HTMLLIElement> {
   title: string
   href: string
   isActive?: boolean

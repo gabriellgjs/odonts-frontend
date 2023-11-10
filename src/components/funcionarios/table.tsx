@@ -19,12 +19,12 @@ import {
 } from '@tanstack/react-table'
 import { useRef, useState } from 'react'
 
-import ButtonsPagination from './buttonsPagination'
 import ModalCreateEmployee from './modalCreateEmployee'
 import ModalEditEmployee from './modalEditEmployee'
 import ModalViewEmployee from './modalViewEmployee'
 import StatusEmployeeButton from './statusEmployeeButton'
 import { DataTableProps, Employee, RefModalProps } from './types/employeeTypes'
+import { DataTablePagination } from './tablePaggination'
 
 export function Table<TData extends Employee, TValue>({
   columns,
@@ -41,11 +41,6 @@ export function Table<TData extends Employee, TValue>({
       columnFilters,
     },
     getPaginationRowModel: getPaginationRowModel(),
-    initialState: {
-      pagination: {
-        pageSize: 8,
-      },
-    },
   })
 
   const InputFinder = (
@@ -74,13 +69,6 @@ export function Table<TData extends Employee, TValue>({
             }}
           />
         </div>
-
-        <ButtonsPagination
-          getCanNextPage={table.getCanNextPage()}
-          getCanPreviousPage={table.getCanPreviousPage()}
-          nextPage={table.nextPage}
-          previousPage={table.previousPage}
-        />
 
         <TableComponent>
           <TableHeader>
@@ -140,6 +128,9 @@ export function Table<TData extends Employee, TValue>({
             )}
           </TableBody>
         </TableComponent>
+        <div>
+          <DataTablePagination table={table} />
+        </div>
       </div>
     </div>
   )

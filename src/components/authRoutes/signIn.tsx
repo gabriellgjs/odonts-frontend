@@ -52,7 +52,7 @@ export const SignIn = () => {
         <div className="flex flex-col items-center justify-center">
           <Logo />
 
-          <p className="mt-8 text-5xl font-bold uppercase text-orange-500">
+          <p className="mt-8 text-5xl font-bold uppercase text-orange-500 dark:text-blue-500">
             odonts
           </p>
         </div>

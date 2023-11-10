@@ -2,44 +2,68 @@
 
 import { signIn } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
-import { SyntheticEvent, useCallback, useRef, useState } from 'react'
+import { useCallback, useState } from 'react'
 
 import { Logo } from '@components/shared/logo/logo'
 import { Button } from '@components/ui/button'
 import { Input } from '@components/ui/input'
+import * as z from 'zod'
+import {
+  Form,
+  FormControl,
+  FormField,
+  FormItem,
+  FormLabel,
+  FormMessage,
+} from '@components/ui/form'
+import { zodResolver } from '@hookform/resolvers/zod'
+import { useForm } from 'react-hook-form'
+
+const loginSchema = z.object({
+  email: z
+    .string({ required_error: 'Email é obrigatório' })
+    .trim()
+    .min(1, 'Email é obrigatório')
+    .email(),
+  password: z
+    .string({ required_error: 'Senha é obrigatória' })
+    .trim()
+    .min(4, 'Senha tem que ser maior que 4 caracteres'),
+})
+
+type LoginFormValues = z.infer<typeof loginSchema>
 
 export const SignIn = () => {
   const [isPasswordVisible, setIsPasswordVisible] = useState(false)
-  const [isLoading, setIsLoading] = useState(false)
-  const emailInputRef = useRef<HTMLInputElement>(null)
-  const passwordInputRef = useRef<HTMLInputElement>(null)
   const router = useRouter()
-
-  const handleSubmit = useCallback(
-    async (event: SyntheticEvent) => {
-      event.preventDefault()
-
-      try {
-        setIsLoading(true)
-        const result = await signIn('credentials', {
-          email: emailInputRef.current?.value,
-          password: passwordInputRef.current?.value,
-          redirect: false,
-        })
-
-        if (result?.error) {
-          return
-        }
-
-        router.push('/')
-      } catch (error) {
-        console.log(error)
-      } finally {
-        setIsLoading(false)
-      }
+  const form = useForm<LoginFormValues>({
+    resolver: zodResolver(loginSchema),
+    mode: 'onSubmit',
+    defaultValues: {
+      email: '',
+      password: '',
     },
-    [router],
-  )
+  })
+
+  const { isSubmitting } = form.formState
+
+  const onSubmit = async (dataForm: LoginFormValues) => {
+    try {
+      const result = await signIn('credentials', {
+        email: dataForm.email,
+        password: dataForm.password,
+        redirect: false,
+      })
+
+      if (result?.error) {
+        return
+      }
+
+      router.push('/')
+    } catch (error) {
+      console.log(error)
+    }
+  }
 
   const handleTogglePasswordVisibility = useCallback(
     () => setIsPasswordVisible((prevState) => !prevState),
@@ -56,34 +80,61 @@ export const SignIn = () => {
             odonts
           </p>
         </div>
-
-        <form
-          className="mx-8 mt-8 flex flex-col gap-8 sm:mx-0"
-          onSubmit={handleSubmit}
-        >
-          <div className="flex w-full">
-            <Input
-              variant="email"
-              ref={emailInputRef}
-              placeholder="E-mail"
-              type="email"
+        <Form {...form}>
+          <form
+            className="mx-8 mt-8 flex flex-col gap-8 sm:mx-0"
+            onSubmit={form.handleSubmit(onSubmit)}
+          >
+            <FormField
+              control={form.control}
+              name="email"
+              render={({ field }) => (
+                <FormItem className={''}>
+                  <FormLabel>Email</FormLabel>
+                  <FormControl>
+                    <div className="flex w-full">
+                      <Input
+                        {...field}
+                        variant="email"
+                        placeholder="Email"
+                        type="email"
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
 
-          <div className="relative">
-            <Input
-              variant="password"
-              ref={passwordInputRef}
-              placeholder="Senha"
-              togglePasswordVisibility={handleTogglePasswordVisibility}
-              isPasswordVisible={isPasswordVisible}
+            <FormField
+              control={form.control}
+              name="password"
+              render={({ field }) => (
+                <FormItem className={'w-full'}>
+                  <FormLabel>Senha</FormLabel>
+                  <FormControl>
+                    <div className="relative w-full">
+                      <Input
+                        {...field}
+                        variant="password"
+                        placeholder="Senha"
+                        togglePasswordVisibility={
+                          handleTogglePasswordVisibility
+                        }
+                        isPasswordVisible={isPasswordVisible}
+                      />
+                    </div>
+                  </FormControl>
+                  <FormMessage />
+                </FormItem>
+              )}
             />
-          </div>
 
-          <Button disabled={isLoading} type="submit">
-            entrar
-          </Button>
-        </form>
+            <Button disabled={isSubmitting} type="submit">
+              entrar
+            </Button>
+          </form>
+        </Form>
       </div>
     </div>
   )

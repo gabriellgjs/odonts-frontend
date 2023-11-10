@@ -8,6 +8,7 @@ import {
 import { signOut } from 'next-auth/react'
 import { useRouter } from 'next/navigation'
 import { memo } from 'react'
+import { destroyCookie } from 'nookies'
 
 type AvatarProfileProps = {
   name: string
@@ -35,6 +36,7 @@ const AvatarProfile = ({ name }: AvatarProfileProps) => {
           className="text-red-400 hover:text-red-500 dark:text-red-500 dark:hover:text-red-600"
           onClick={async () => {
             await signOut({ redirect: false })
+            destroyCookie(null, 'access-token')
             router.push('/login')
           }}
         >

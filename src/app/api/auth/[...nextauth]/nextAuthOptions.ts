@@ -18,7 +18,10 @@ const nextAuthOptions: NextAuthOptions = {
             email: credentials?.email,
             password: credentials?.password,
           })
-          .then((res) => res.data)
+          .then((res) => {
+            const user = res.data
+            return user
+          })
 
         if (response?.user) {
           return response.user
@@ -37,8 +40,11 @@ const nextAuthOptions: NextAuthOptions = {
       return token
     },
     async session({ session, token }) {
+      'use server'
+      const cookiesApp = cookies()
       session = token as never
-      cookies().set('access-token', session.user.token ?? '')
+      cookiesApp.set('access-token', session.user.token ?? '')
+
       return session
     },
   },

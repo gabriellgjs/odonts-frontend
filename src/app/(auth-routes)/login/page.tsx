@@ -1,5 +1,4 @@
 import { SignIn } from '@components/authRoutes/signIn'
-import { signOut } from './singOut'
 import { Metadata } from 'next'
 
 export const metadata: Metadata = {
@@ -7,7 +6,6 @@ export const metadata: Metadata = {
   description: 'Configure suas informações de perfil',
 }
 const SigInLogin = () => {
-  signOut()
   return <SignIn />
 }
 

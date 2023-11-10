@@ -25,7 +25,6 @@ import * as z from 'zod'
 import { useCallback, useState } from 'react'
 import api from '@lib/axios'
 import { toast } from '@components/ui/use-toast'
-import { useRouter } from 'next/navigation'
 
 const userFormPasswordSchema = z
   .object({
@@ -53,7 +52,6 @@ type UserFormProps = {
 }
 
 const UserPasswordForm = ({ id }: UserFormProps) => {
-  const router = useRouter()
   const [isCurrentPasswordVisible, setIsCurrentPasswordVisible] =
     useState(false)
   const [isNewPasswordVisible, setIsNewPasswordVisible] = useState(false)
@@ -62,8 +60,8 @@ const UserPasswordForm = ({ id }: UserFormProps) => {
 
   const form = useForm<UserFormPasswordValues>({
     resolver: zodResolver(userFormPasswordSchema),
-    mode: 'onChange',
   })
+  const { isSubmitted } = form.formState
 
   const onSubmit = (dataForm: UserFormPasswordValues) => {
     const bodyRequest = {
@@ -78,7 +76,6 @@ const UserPasswordForm = ({ id }: UserFormProps) => {
             title: 'Sucesso',
             description: 'Senha atualizada com sucesso',
           })
-          router.refresh()
         })
         .catch((error) => {
           console.log(error.message)
@@ -89,11 +86,14 @@ const UserPasswordForm = ({ id }: UserFormProps) => {
           })
         })
         .finally(() => {
-          router.refresh()
+          form.setValue('currentPassword', '')
+          form.setValue('newPassword', '')
+          form.setValue('confirmNewPassword', '')
         })
     }
 
     request()
+    form.reset()
   }
 
   const handleToggleCurrentPasswordVisibility = useCallback(
@@ -196,7 +196,11 @@ const UserPasswordForm = ({ id }: UserFormProps) => {
                 )}
               />
               <CardFooter className={'my-4 flex w-full justify-center'}>
-                <Button type="submit" className={'w-full px-12 lg:w-fit'}>
+                <Button
+                  type="submit"
+                  disabled={isSubmitted}
+                  className={'w-full px-12 lg:w-fit'}
+                >
                   Salvar
                 </Button>
               </CardFooter>

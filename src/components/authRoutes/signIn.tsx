@@ -18,6 +18,7 @@ import {
 } from '@components/ui/form'
 import { zodResolver } from '@hookform/resolvers/zod'
 import { useForm } from 'react-hook-form'
+import { toast } from '@components/ui/use-toast'
 
 const loginSchema = z.object({
   email: z
@@ -56,6 +57,11 @@ export const SignIn = () => {
       })
 
       if (result?.error) {
+        toast({
+          title: 'Atenção',
+          variant: 'destructive',
+          description: result.error,
+        })
         return
       }
 

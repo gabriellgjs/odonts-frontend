@@ -61,7 +61,7 @@ const UserPasswordForm = ({ id }: UserFormProps) => {
   const form = useForm<UserFormPasswordValues>({
     resolver: zodResolver(userFormPasswordSchema),
   })
-  const { isSubmitted } = form.formState
+  const { isSubmitting } = form.formState
 
   const onSubmit = (dataForm: UserFormPasswordValues) => {
     const bodyRequest = {
@@ -198,7 +198,7 @@ const UserPasswordForm = ({ id }: UserFormProps) => {
               <CardFooter className={'my-4 flex w-full justify-center'}>
                 <Button
                   type="submit"
-                  disabled={isSubmitted}
+                  disabled={isSubmitting}
                   className={'w-full px-12 lg:w-fit'}
                 >
                   Salvar

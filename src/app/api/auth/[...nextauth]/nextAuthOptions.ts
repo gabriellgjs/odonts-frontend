@@ -18,9 +18,9 @@ const nextAuthOptions: NextAuthOptions = {
             email: credentials?.email,
             password: credentials?.password,
           })
-          .then((res) => {
-            const user = res.data
-            return user
+          .then((res) => res.data)
+          .catch((error) => {
+            throw new Error(error.response.data.message)
           })
 
         if (response?.user) {

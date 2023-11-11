@@ -1,11 +1,12 @@
 'use client'
 
-import { AlignJustify } from 'lucide-react'
+import { AlignJustify, X } from 'lucide-react'
 import { useSelectedLayoutSegment } from 'next/navigation'
 import { SideBarLink } from '@components/shared/sideBarLink/sideBarLink'
 import { Separator } from '@components/ui/separator'
 import {
   Sheet,
+  SheetClose,
   SheetContent,
   SheetTitle,
   SheetTrigger,
@@ -60,8 +61,14 @@ const SideBar = () => {
       </SheetTrigger>
       <SheetContent side="left" closeSheet={handleSetSideBar}>
         <div className="flex h-screen flex-col">
-          <SheetTitle className="flex flex-row items-center justify-center">
+          <SheetTitle className="flex flex-row items-center justify-between sm:justify-center">
             <Logo width={50} height={50} />
+            <SheetClose
+              onClick={handleSetSideBar}
+              className={' block sm:hidden'}
+            >
+              <X />
+            </SheetClose>
           </SheetTitle>
           <Separator className="my-4" />
           {sideBarOptions.map((option) => (

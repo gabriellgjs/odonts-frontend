@@ -13,10 +13,10 @@ import { Label } from '@/components/ui/label'
 import { cn } from '@/lib/utils'
 import {
   ComponentPropsWithoutRef,
-  ElementRef,
-  HTMLAttributes,
   createContext,
+  ElementRef,
   forwardRef,
+  HTMLAttributes,
   useContext,
   useId,
 } from 'react'
@@ -90,7 +90,7 @@ const FormItem = forwardRef<HTMLDivElement, HTMLAttributes<HTMLDivElement>>(
         <div
           ref={ref}
           className={cn(
-            'relative mb-2 flex flex-col items-start gap-2',
+            'relative mb-2 flex flex-col items-start gap-2 py-1',
             className,
           )}
           {...props}
@@ -179,7 +179,7 @@ const FormMessage = forwardRef<
     <p
       ref={ref}
       id={formMessageId}
-      className={cn('absolute -bottom-5 text-xs text-red-500', className)}
+      className={cn('absolute -bottom-4 text-xs text-red-500', className)}
       {...props}
     >
       {body}

@@ -21,7 +21,7 @@ const buttonVariants = cva(
           'transition-colors border sm:hover:border-gray-200 dark:sm:hover:bg-gray-900 dark:sm:text-neutral-100 sm:text-gray-800 sm:bg-transparent dark:sm:bg-gray-700 hover:bg-opacity-60 hover:bg-stone-200 text-base font-medium',
         confirm:
           'font-medium bg-green-600 hover:bg-green-800 text-white transition-colors',
-        ghost: '',
+        ghost: 'focus:border-blue-500',
       },
       size: {
         default: '',

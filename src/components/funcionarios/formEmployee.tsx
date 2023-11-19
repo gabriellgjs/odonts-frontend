@@ -25,7 +25,6 @@ import {
   normalizeCPF,
   normalizeDate,
   normalizePhoneNumber,
-  normalizeRG,
 } from '@utils/functions/normalizeInputs'
 import { useSession } from 'next-auth/react'
 import { memo, useEffect, useMemo, useState } from 'react'
@@ -179,10 +178,6 @@ const FormEmployee = ({
   useEffect(() => {
     form.setValue('hireDate', normalizeDate(hireDateValueWatch))
   }, [hireDateValueWatch, form])
-
-  useEffect(() => {
-    form.setValue('rg', normalizeRG(rgValueWatch))
-  }, [rgValueWatch, form])
 
   useEffect(() => {
     form.setValue('telephoneNumber', normalizePhoneNumber(phoneValueWatch))

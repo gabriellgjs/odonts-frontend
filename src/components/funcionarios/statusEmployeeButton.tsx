@@ -15,7 +15,7 @@ import { useRouter } from 'next/navigation'
 import { useState } from 'react'
 import { StyledDiv } from '../ui/styledDiv'
 import { useToast } from '../ui/use-toast'
-import { ModalProps } from './types/employeeTypes'
+import { ModalProps } from '@components/shared/dialog/types/dialogTypes'
 
 const StatusEmployeeButton = ({ row }: ModalProps) => {
   const [open, setOpen] = useState(false)
@@ -64,7 +64,7 @@ const StatusEmployeeButton = ({ row }: ModalProps) => {
       <AlertDialogTrigger>
         <>
           <StyledDiv
-            className={'hover:bg-gray-100'}
+            className={'p-8 hover:bg-gray-100'}
             icon={status === 'ativo' ? <UserX2 /> : <UserCheck2 />}
           />
         </>

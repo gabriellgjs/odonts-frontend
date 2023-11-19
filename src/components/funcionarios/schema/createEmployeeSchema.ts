@@ -30,7 +30,7 @@ export const CreateEmployeeSchema = z.object({
     })
     .trim()
     .min(1, 'RG é obrigatório')
-    .max(12, 'RG não pode ter mais de 12 caracteres'),
+    .max(15, 'RG não pode ter mais de 15 caracteres'),
   cpf: z
     .string({
       required_error: 'CPF é obrigatório',

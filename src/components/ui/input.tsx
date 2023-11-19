@@ -14,11 +14,12 @@ const inputVariants = cva(
       variant: {
         email: ['flex-1'],
         password: ['flex-1', 'w-full'],
-        boxFinder: ['w-96', ''],
+        ghost: 'bg-transparent border',
       },
       inputSize: {
         default: 'p-4',
         sm: 'p-3',
+        lg: 'w-full sm:w-2/4 lg:w-1/3 p-4',
       },
       sizes: {
         email: 'w-full',

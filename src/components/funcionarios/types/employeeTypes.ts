@@ -1,4 +1,3 @@
-import { ColumnDef } from '@tanstack/react-table'
 import { z } from 'zod'
 import { CreateEmployeeSchema } from '../schema/createEmployeeSchema'
 
@@ -35,25 +34,6 @@ export type Employee = {
     state: string
     street: string
   }
-}
-
-export type RefModalProps = {
-  open: (id?: string | number, isActive?: boolean) => void
-  close: () => void
-}
-
-export type RefFormProps = {
-  reset: () => void
-}
-
-export type DataTableProps<TData, TValue> = {
-  columns: ColumnDef<TData, TValue>[]
-  data: TData[]
-}
-
-export type ModalProps = {
-  dialogRef?: (ref: RefModalProps) => void | undefined
-  row?: Employee
 }
 
 export type createEmployeeFormData = z.infer<typeof CreateEmployeeSchema>
@@ -100,15 +80,3 @@ export type InputsProps =
         | undefined
     }[]
   | undefined
-
-export type SelectOptionProps = {
-  value: string | number
-  selectValue: string
-}[]
-
-export type ButtonsPagination = {
-  previousPage: () => void
-  getCanPreviousPage: boolean
-  nextPage: () => void
-  getCanNextPage: boolean
-}

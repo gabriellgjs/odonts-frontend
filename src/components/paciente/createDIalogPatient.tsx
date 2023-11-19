@@ -14,15 +14,15 @@ import api from '@/lib/axios'
 import { useRouter } from 'next/navigation'
 import { StyledDiv } from '../ui/styledDiv'
 import { useToast } from '../ui/use-toast'
-import FormEmployee from './formEmployee'
 import {
-  createEmployeeFormData,
   ModalProps,
   RefFormProps,
   RefModalProps,
-} from './types/employeeTypes'
+} from '@components/shared/dialog/types/dialogTypes'
+import { PatientFormValues } from '@components/paciente/types/patientTypes'
+import FormCreatePatient from '@components/paciente/create/formCreatePatient'
 
-const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
+const CreateDialogPatient = ({ dialogRef }: ModalProps) => {
   const [open, setOpen] = useState(false)
   const router = useRouter()
   const { toast } = useToast()
@@ -39,7 +39,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
   }, [dialogRef])
 
   const onSubmit = useCallback(
-    (dataForm: createEmployeeFormData) => {
+    (dataForm: PatientFormValues) => {
       const data = {
         name: dataForm.name,
         birthDate: dataForm.birthDate,
@@ -47,9 +47,6 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
         cpf: dataForm.cpf,
         maritalStatus: dataForm.maritalStatus,
         gender: dataForm.gender,
-        hireDate: dataForm.hireDate,
-        email: dataForm.email,
-        roleId: Number(dataForm.roleId),
         address: {
           street: dataForm.street,
           number: dataForm.number,
@@ -63,6 +60,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
         },
       }
 
+      console.log(data)
       const request = async () => {
         await api
           .post('/employees', data)
@@ -78,7 +76,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
             toast({
               title: 'Atenção',
               variant: 'destructive',
-              description: 'Error ao criar funcionário',
+              description: error.response.data.message,
             })
           })
           .finally(() => {
@@ -86,7 +84,7 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
           })
       }
 
-      request()
+      // request()
     },
     [router, toast],
   )
@@ -100,33 +98,27 @@ const ModalCreateEmployee = ({ dialogRef }: ModalProps) => {
       }}
     >
       <DialogTrigger asChild>
-        <div>
+        <div className={'w-full  sm:max-w-fit'}>
           <StyledDiv
-            className="cursor-pointer bg-gray-100 transition-colors hover:bg-gray-200 dark:bg-gray-800 "
+            className="cursor-pointer bg-gray-100 p-2 transition-colors hover:bg-gray-200 dark:bg-gray-800"
             icon={<Plus />}
           >
             <span className="text-gray-700 dark:text-neutral-100">
-              Criar Funcionário
+              Criar Paciente
             </span>
           </StyledDiv>
         </div>
       </DialogTrigger>
 
-      <DialogContent className="sm:min-w-fit">
-        <DialogHeader className="mt-20 sm:mt-0">
-          <DialogTitle>Criar novo funcionário</DialogTitle>
-          <DialogDescription>Crie um novo funcionário</DialogDescription>
+      <DialogContent className="flex h-screen max-h-[90svh] w-full flex-col px-4 py-8 pb-0">
+        <DialogHeader className="">
+          <DialogTitle>Criar novo paciente</DialogTitle>
+          <DialogDescription>Crie um novo paciente</DialogDescription>
         </DialogHeader>
-        <FormEmployee
-          disabledInputs={false}
-          formRef={(ref) => {
-            refFormCreate.current = ref
-          }}
-          onSubmit={onSubmit}
-        />
+        <FormCreatePatient onSubmit={onSubmit} />
       </DialogContent>
     </Dialog>
   )
 }
 
-export default memo(ModalCreateEmployee)
+export default memo(CreateDialogPatient)

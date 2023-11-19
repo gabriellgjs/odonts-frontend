@@ -14,20 +14,8 @@ import {
 import { toast } from '@components/ui/use-toast'
 import { CreateEmployeeSchema } from '@components/funcionarios/schema/createEmployeeSchema'
 import { Input } from '@components/ui/input'
-import {
-  RoleOption,
-  SelectOptionProps,
-} from '@components/funcionarios/types/employeeTypes'
-import {
-  Select,
-  SelectContent,
-  SelectGroup,
-  SelectItem,
-  SelectTrigger,
-  SelectValue,
-} from '@components/ui/select'
-import { cn } from '@lib/utils'
-import { useEffect, useMemo, useState } from 'react'
+import { RoleOption } from '@components/funcionarios/types/employeeTypes'
+import { useEffect, useState } from 'react'
 import api from '@lib/axios'
 import { useSession } from 'next-auth/react'
 import { Button } from '@components/ui/button'
@@ -35,6 +23,10 @@ import { normalizeCEP } from '@utils/functions/normalizeInputs'
 import { findByCEP } from '@services/findByCEP/findByCEP'
 import { useRouter } from 'next/navigation'
 import { SettingsProps } from '@components/settings/types/settingsTypes'
+import { SelectOptionProps } from '@components/shared/selects/type/selectProps'
+import SelectGender from '@components/shared/selects/selectGender'
+import SelectMaritalStatus from '@components/shared/selects/selectMaritalStatus'
+import SelectRoleId from '@components/shared/selects/selectRoleId'
 
 const profileFormSchema = CreateEmployeeSchema.omit({ email: true })
 
@@ -118,43 +110,6 @@ export function ProfileForm({ employee }: SettingsProps) {
     }
   }, [postalCodeValueWatch, form])
 
-  const genderOptions = useMemo(() => {
-    return [
-      {
-        value: 'Masculino',
-        selectValue: 'Masculino',
-      },
-      {
-        value: 'Feminino',
-        selectValue: 'Feminino',
-      },
-    ]
-  }, [])
-  const maritalStatusOptions = useMemo(() => {
-    return [
-      {
-        value: 'Solteiro (a)',
-        selectValue: 'Solteiro (a)',
-      },
-      {
-        value: 'Casado (a)',
-        selectValue: 'Casado (a)',
-      },
-      {
-        value: 'Divorciado (a)',
-        selectValue: 'Divorciado (a)',
-      },
-      {
-        value: 'Viúvo (a)',
-        selectValue: 'Viúvo (a)',
-      },
-      {
-        value: 'Outro',
-        selectValue: 'Outro',
-      },
-    ]
-  }, [])
-
   function onSubmit(formValues: ProfileFormValues) {
     const data = {
       id: employee.id,
@@ -224,9 +179,13 @@ export function ProfileForm({ employee }: SettingsProps) {
           name="name"
           render={({ field }) => (
             <FormItem className={'col-span-2'}>
-              <FormLabel>Nome</FormLabel>
+              <FormLabel>Nome completo</FormLabel>
               <FormControl>
-                <Input className={'w-full'} placeholder="Nome" {...field} />
+                <Input
+                  className={'w-full'}
+                  placeholder="Nome completo"
+                  {...field}
+                />
               </FormControl>
               <FormMessage />
             </FormItem>
@@ -290,123 +249,16 @@ export function ProfileForm({ employee }: SettingsProps) {
           )}
         />
 
-        <FormField
+        <SelectRoleId
           control={form.control}
-          name="roleId"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Cargo</FormLabel>
-              <Select name="roleId" onValueChange={field.onChange}>
-                <FormControl>
-                  <SelectTrigger
-                    className={cn(
-                      'dark:border-gray-400 dark:bg-transparent dark:focus:border-blue-500',
-                    )}
-                  >
-                    <SelectValue
-                      className="w-full text-slate-500 "
-                      placeholder={field.value}
-                    />
-                  </SelectTrigger>
-                </FormControl>
-                <FormMessage />
-                <SelectContent className="w-full dark:bg-gray-700">
-                  <SelectGroup>
-                    {rolesOptions.map((role, index) => (
-                      <SelectItem
-                        className={
-                          'hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-800'
-                        }
-                        key={index}
-                        value={String(role.value)}
-                      >
-                        {role.selectValue}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
+          placeholder={employee.user.role.description}
         />
 
-        <FormField
+        <SelectGender control={form.control} placeholder={employee.gender} />
+
+        <SelectMaritalStatus
           control={form.control}
-          name="gender"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Gênero</FormLabel>
-              <Select name="gender" onValueChange={field.onChange}>
-                <FormControl>
-                  <SelectTrigger
-                    className={cn(
-                      'dark:border-gray-400 dark:bg-transparent dark:focus:border-blue-500',
-                    )}
-                  >
-                    <SelectValue
-                      className="w-full text-slate-500 "
-                      placeholder={field.value}
-                    />
-                  </SelectTrigger>
-                </FormControl>
-                <FormMessage />
-                <SelectContent className="w-full dark:bg-gray-700">
-                  <SelectGroup>
-                    {genderOptions.map((gender, index) => (
-                      <SelectItem
-                        className={
-                          'hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-800'
-                        }
-                        key={index}
-                        value={String(gender.value)}
-                      >
-                        {gender.selectValue}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="maritalStatus"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Estado Civil</FormLabel>
-              <Select name="maritalStatus" onValueChange={field.onChange}>
-                <FormControl>
-                  <SelectTrigger
-                    className={cn(
-                      'dark:border-gray-400 dark:bg-transparent dark:focus:border-blue-500',
-                    )}
-                  >
-                    <SelectValue
-                      className="w-full text-slate-500 "
-                      placeholder={field.value}
-                    />
-                  </SelectTrigger>
-                </FormControl>
-                <FormMessage />
-                <SelectContent className="w-full dark:bg-gray-700">
-                  <SelectGroup>
-                    {maritalStatusOptions.map((maritalStatus, index) => (
-                      <SelectItem
-                        className={
-                          'hover:bg-slate-200 dark:bg-gray-700 dark:hover:bg-gray-800'
-                        }
-                        key={index}
-                        value={String(maritalStatus.value)}
-                      >
-                        {maritalStatus.selectValue}
-                      </SelectItem>
-                    ))}
-                  </SelectGroup>
-                </SelectContent>
-              </Select>
-            </FormItem>
-          )}
+          placeholder={employee.maritalStatus}
         />
 
         <FormField

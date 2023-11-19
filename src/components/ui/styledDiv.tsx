@@ -17,7 +17,8 @@ export const StyledDiv = ({ children, className, icon }: StyledDivProps) => {
     <div
       className={cn(
         className,
-        'my-4 flex items-center justify-center gap-3 rounded-lg p-3 text-base font-medium capitalize text-gray-800 dark:hover:bg-gray-900',
+        'my-4 flex items-center justify-center gap-3 rounded-lg text-base font-medium',
+        'p-2 capitalize text-gray-800 dark:hover:bg-gray-900',
       )}
     >
       {icon &&

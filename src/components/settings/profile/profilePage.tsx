@@ -4,7 +4,7 @@ import { Employee } from '@components/funcionarios/types/employeeTypes'
 
 import api from '@lib/axios'
 import { useSession } from 'next-auth/react'
-import { useEffect, useState } from 'react'
+import { cache, useEffect, useState } from 'react'
 import { ProfileForm } from '@components/settings/profile/profileForm'
 import { Skeleton } from '@components/ui/skeleton'
 
@@ -13,7 +13,7 @@ const ProfilePage = () => {
   const [employee, setEmployee] = useState<Employee>()
 
   useEffect(() => {
-    const employee = async () => {
+    const employee = cache(async () => {
       const id = data?.user.id
       try {
         await api.get(`/employees/${id}`).then((response) => {
@@ -22,7 +22,7 @@ const ProfilePage = () => {
       } catch (error) {
         console.log(error)
       }
-    }
+    })
     if (data?.user.id) {
       employee()
     }

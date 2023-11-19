@@ -1,36 +1,46 @@
 'use client'
 
+import { Plus } from 'lucide-react'
+import { memo, useCallback, useEffect, useRef, useState } from 'react'
 import {
   Dialog,
   DialogContent,
+  DialogDescription,
   DialogHeader,
   DialogTitle,
   DialogTrigger,
 } from '@components/ui/dialog'
-import { Pen } from 'lucide-react'
-import { memo, useCallback, useRef, useState } from 'react'
-
-import { StyledDiv } from '../ui/styledDiv'
-import FormEmployee from './formEmployee'
-import { createEmployeeFormData } from './types/employeeTypes'
-import { useRouter } from 'next/navigation'
-import { useToast } from '../ui/use-toast'
 import api from '@/lib/axios'
+import { useRouter } from 'next/navigation'
+import { StyledDiv } from '../ui/styledDiv'
+import { useToast } from '../ui/use-toast'
+import { createEmployeeFormData } from './types/employeeTypes'
+import FormCreateEmployee from '@components/funcionarios/create/formCreateEmployee'
 import {
   ModalProps,
   RefFormProps,
+  RefModalProps,
 } from '@components/shared/dialog/types/dialogTypes'
 
-const ModalEditEmployee = ({ row }: ModalProps) => {
+const CreateDialogEmployee = ({ dialogRef }: ModalProps) => {
   const [open, setOpen] = useState(false)
-  const refFormView = useRef<RefFormProps | null>(null)
   const router = useRouter()
   const { toast } = useToast()
+  const refFormCreate = useRef<RefFormProps | null>(null)
+
+  useEffect(() => {
+    if (dialogRef) {
+      const ref: RefModalProps = {
+        open: () => setOpen(true),
+        close: () => setOpen(false),
+      }
+      dialogRef(ref)
+    }
+  }, [dialogRef])
 
   const onSubmit = useCallback(
     (dataForm: createEmployeeFormData) => {
       const data = {
-        id: row?.id,
         name: dataForm.name,
         birthDate: dataForm.birthDate,
         rg: dataForm.rg,
@@ -38,16 +48,9 @@ const ModalEditEmployee = ({ row }: ModalProps) => {
         maritalStatus: dataForm.maritalStatus,
         gender: dataForm.gender,
         hireDate: dataForm.hireDate,
-        user: {
-          id: row?.user.id,
-          email: dataForm.email,
-          roleId:
-            dataForm.roleId === row?.user.role.description
-              ? row.user.roleId
-              : dataForm.roleId,
-        },
+        email: dataForm.email,
+        roleId: Number(dataForm.roleId),
         address: {
-          id: row?.address.id,
           street: dataForm.street,
           number: dataForm.number,
           district: dataForm.district,
@@ -56,18 +59,17 @@ const ModalEditEmployee = ({ row }: ModalProps) => {
           state: dataForm.state,
         },
         telephone: {
-          id: row?.telephone.id,
           telephoneNumber: dataForm.telephoneNumber,
         },
       }
 
       const request = async () => {
         await api
-          .put(`/employees/${row?.id}`, data)
+          .post('/employees', data)
           .then(() => {
             toast({
               title: 'Sucesso',
-              description: 'Funcionário atualizado com sucesso',
+              description: 'Funcionário criado com sucesso',
             })
             setOpen(false)
           })
@@ -76,7 +78,7 @@ const ModalEditEmployee = ({ row }: ModalProps) => {
             toast({
               title: 'Atenção',
               variant: 'destructive',
-              description: 'Error ao atualizar funcionário',
+              description: error.response.data.message,
             })
           })
           .finally(() => {
@@ -86,16 +88,7 @@ const ModalEditEmployee = ({ row }: ModalProps) => {
 
       request()
     },
-    [
-      router,
-      row?.address.id,
-      row?.id,
-      row?.telephone.id,
-      row?.user.id,
-      row?.user.role.description,
-      row?.user.roleId,
-      toast,
-    ],
+    [router, toast],
   )
 
   return (
@@ -103,30 +96,31 @@ const ModalEditEmployee = ({ row }: ModalProps) => {
       open={open}
       onOpenChange={(isOpen) => {
         setOpen(isOpen)
-        if (isOpen) refFormView.current?.reset()
+        if (isOpen) refFormCreate.current?.reset()
       }}
     >
       <DialogTrigger asChild>
-        <div>
-          <StyledDiv className={'py-0 hover:bg-gray-100'} icon={<Pen />} />
+        <div className={'w-full sm:max-w-fit'}>
+          <StyledDiv
+            className="cursor-pointer bg-gray-100 p-4 transition-colors hover:bg-gray-200 dark:bg-gray-800"
+            icon={<Plus />}
+          >
+            <span className="text-gray-700 dark:text-neutral-100">
+              Criar Funcionário
+            </span>
+          </StyledDiv>
         </div>
       </DialogTrigger>
 
-      <DialogContent className="sm:min-w-fit">
-        <DialogHeader className="mt-20 sm:mt-0">
-          <DialogTitle>Editar funcionário</DialogTitle>
+      <DialogContent className="flex h-screen max-h-[90svh] w-full flex-col px-4 py-8">
+        <DialogHeader className="">
+          <DialogTitle>Criar novo funcionário</DialogTitle>
+          <DialogDescription>Crie um novo funcionário</DialogDescription>
         </DialogHeader>
-        <FormEmployee
-          disabledInputs={false}
-          row={row}
-          formRef={(ref) => {
-            refFormView.current = ref
-          }}
-          onSubmit={onSubmit}
-        />
+        <FormCreateEmployee onSubmit={onSubmit} />
       </DialogContent>
     </Dialog>
   )
 }
 
-export default memo(ModalEditEmployee)
+export default memo(CreateDialogEmployee)

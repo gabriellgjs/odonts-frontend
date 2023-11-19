@@ -22,7 +22,7 @@ const ModalViewEmployee = ({ row }: ModalProps) => {
     >
       <DialogTrigger asChild>
         <div>
-          <StyledDiv className={'hover:bg-gray-100'} icon={<Eye />} />
+          <StyledDiv className={'py-0 hover:bg-gray-100'} icon={<Eye />} />
         </div>
       </DialogTrigger>
 

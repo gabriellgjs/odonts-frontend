@@ -2,9 +2,9 @@
 
 import { useEffect, useState } from 'react'
 import { Toaster } from '../ui/toaster'
-import { columns } from './columns'
+import { columnsEmployee } from './columnsEmployee'
 import { Employee } from './types/employeeTypes'
-import { Table } from './table'
+import { TableEmployee } from '@components/funcionarios/tableEmployee'
 
 type EmployeesPageProps = {
   employees: Employee[] | undefined
@@ -18,11 +18,9 @@ const EmployeesPage = ({ employees }: EmployeesPageProps) => {
   }, [employees])
 
   return (
-    <div className="sm:mx-60 sm:flex sm:min-h-screen sm:overflow-y-visible">
+    <div className="h-full w-full">
       <Toaster />
-      <div className="py-4 sm:w-full">
-        <Table columns={columns} data={employeeList} />
-      </div>
+      <TableEmployee columns={columnsEmployee} data={employeeList} />
     </div>
   )
 }

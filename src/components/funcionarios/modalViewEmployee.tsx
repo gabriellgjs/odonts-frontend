@@ -6,7 +6,10 @@ import { memo, useRef, useState } from 'react'
 
 import { StyledDiv } from '../ui/styledDiv'
 import FormEmployee from './formEmployee'
-import { ModalProps, RefFormProps } from './types/employeeTypes'
+import {
+  ModalProps,
+  RefFormProps,
+} from '@components/shared/dialog/types/dialogTypes'
 
 const ModalViewEmployee = ({ row }: ModalProps) => {
   const [open, setOpen] = useState(false)

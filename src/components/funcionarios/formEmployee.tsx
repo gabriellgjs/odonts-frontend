@@ -37,10 +37,10 @@ import {
   createEmployeeFormData,
   Employee,
   InputsProps,
-  RefFormProps,
   RoleOption,
-  SelectOptionProps,
 } from './types/employeeTypes'
+import { RefFormProps } from '@components/shared/dialog/types/dialogTypes'
+import { SelectOptionProps } from '@components/shared/selects/type/selectProps'
 
 type FormEmployeeProps = {
   row?: Employee | undefined
